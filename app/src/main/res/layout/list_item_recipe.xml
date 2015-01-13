@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="74dp"
+    android:padding="4dip"
+    >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/meal"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dip"
+
+        />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/image"
+        android:text="Agnieszka Pałąk"
+        android:textSize="20sp"
+        />
+    <TextView
+        android:id="@+id/introduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/image"
+        android:layout_below="@id/title"
+        android:text="Biedronka SA"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        />
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/image"
+        android:layout_below="@id/introduction"
+        android:text="Biedronka SA"
+        android:textSize="12sp"
+        />
+</RelativeLayout>
