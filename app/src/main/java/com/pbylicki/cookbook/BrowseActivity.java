@@ -2,6 +2,7 @@ package com.pbylicki.cookbook;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import org.androidannotations.annotations.ViewById;
 @OptionsMenu(R.menu.menu_browse)
 public class BrowseActivity extends Activity {
 
+    public static final int REQUESTCODE = 42;
     @ViewById
     ListView list;
 
@@ -63,7 +65,10 @@ public class BrowseActivity extends Activity {
 
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
-        Toast.makeText(this, "Add new recipe", Toast.LENGTH_LONG).show();
+
+        if(user == null) LoginActivity_.intent(this).startForResult(REQUESTCODE);
+        else Toast.makeText(this, "Add Recipe", Toast.LENGTH_LONG).show();
+
     }
 
     @OptionsItem(R.id.action_profile)
@@ -71,4 +76,17 @@ public class BrowseActivity extends Activity {
         Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUESTCODE) {
+            if(resultCode == RESULT_OK){
+                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+                Toast.makeText(this, user.sessionId, Toast.LENGTH_LONG).show();
+                //Start next Activity
+            }
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }

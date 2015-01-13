@@ -1,41 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_height="200dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/rounded_rectangle">
+        android:background="@drawable/rounded_edittext"
+        >
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:background="@drawable/rounded_edittext"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_margin="10dp"
             android:layout_above="@+id/password"
             android:textColor="#000000"
-            android:hint="e-mail"
+            android:hint="@string/email"
             />
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:background="@drawable/rounded_edittext"
+
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_margin="10dp"
             android:layout_centerVertical="true"
             android:textColor="#000000"
-            android:hint="hasło"
+            android:hint="@string/password"
             />
         <Button
             android:id="@+id/login"
@@ -43,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/password"
             android:layout_margin="10dp"
-            android:text="Zaloguj"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:background="@color/orangebasic"
             />
-        </RelativeLayout>
-
 </RelativeLayout>

@@ -10,5 +10,8 @@
     <string name="action_search">Search</string>
     <string name="action_add">New Recipe</string>
     <string name="action_profile">My Profile</string>
+    <string name="password">Password</string>
+    <string name="email">E-mail</string>
+    <string name="login">Log in</string>
 
 </resources>

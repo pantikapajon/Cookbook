@@ -2,6 +2,7 @@ package com.pbylicki.cookbook;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_login)
 public class LoginActivity extends Activity {
+    public static final String LOGINRESULT = "user";
     @ViewById
     EditText email;
     @ViewById
@@ -48,6 +50,10 @@ public class LoginActivity extends Activity {
         ringProgressDialog.dismiss();
         Log.d(this.getClass().getSimpleName(), "Login succeeded");
         //MyActivity_.intent(this).user(user).start();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(LOGINRESULT,user);
+        setResult(RESULT_OK,returnIntent);
+        finish();
     }
     public void showError(Exception e) {
         ringProgressDialog.dismiss();
