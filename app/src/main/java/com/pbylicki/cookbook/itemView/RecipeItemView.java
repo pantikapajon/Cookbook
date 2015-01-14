@@ -25,6 +25,6 @@ public class RecipeItemView extends RelativeLayout {
     public void bind(Recipe recipe) {
         title.setText(recipe.title);
         introduction.setText(recipe.introduction);
-        date.setText(recipe.created);
+        date.setText(recipe.getCreatedDate().toString());
     }
 }

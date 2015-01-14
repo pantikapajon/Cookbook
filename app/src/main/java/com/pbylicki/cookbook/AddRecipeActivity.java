@@ -21,53 +21,45 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
-@EActivity(R.layout.activity_browse)
+@EActivity(R.layout.activity_add_recipe)
 @OptionsMenu(R.menu.menu_browse)
-public class BrowseActivity extends Activity {
+public class AddRecipeActivity extends Activity {
 
     public static final int REQUESTCODE = 42;
-    @ViewById
-    ListView list;
 
     @Extra
     User user;
 
-    @OptionsMenuItem(R.id.action_search)
-    MenuItem menuSearch;
-
-    @Bean
-    RecipeListAdapter adapter;
     @Bean
     @NonConfigurationInstance
-    RestBrowseBackgroundTask restBackgroundTask;
+    RestAddRecipeBackgroundTask restBackgroundTask;
     ProgressDialog ringProgressDialog;
 
     @AfterViews
     void init() {
-        list.setAdapter(adapter);
         ringProgressDialog = new ProgressDialog(this);
         ringProgressDialog.setMessage("Downloading recipes...");
         ringProgressDialog.setIndeterminate(true);
         ringProgressDialog.show();
-        restBackgroundTask.getRecipeList();
+        //restBackgroundTask.getRecipeList();
     }
 
-    public void showError(Exception e) {
+    public void addError(Exception e) {
         ringProgressDialog.dismiss();
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         e.printStackTrace();
     }
 
-    public void updateRecipeList(RecipeList recipeList) {
+    public void addSuccess() {
         ringProgressDialog.dismiss();
-        adapter.update(recipeList);
+        Toast.makeText(this, getString(R.string.add_recipe_toast_added), Toast.LENGTH_LONG).show();
     }
 
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
 
         if(user == null) LoginActivity_.intent(this).startForResult(REQUESTCODE);
-        else AddRecipeActivity_.intent(this).user(user).start();
+        else Toast.makeText(this, "Add Recipe", Toast.LENGTH_LONG).show();
 
     }
 
@@ -82,7 +74,7 @@ public class BrowseActivity extends Activity {
             if(resultCode == RESULT_OK){
                 user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
                 Toast.makeText(this, user.sessionId, Toast.LENGTH_LONG).show();
-                AddRecipeActivity_.intent(this).user(user).start();
+                //Start next Activity
             }
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();

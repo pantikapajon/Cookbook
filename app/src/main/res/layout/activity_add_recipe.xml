@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/header"
+        android:text="@string/add_recipe_header"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_recipe_title"
+        android:layout_below="@+id/header"/>
+
+    <EditText
+        android:id="@+id/introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_recipe_introduction"
+        android:layout_below="@+id/title"/>
+    <EditText
+        android:id="@+id/servings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_recipe_servings"
+        android:inputType="number"
+        android:layout_below="@+id/introduction"/>
+
+    <TextView
+        android:id="@+id/timelabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/servings"
+        android:text="@string/add_recipe_timelabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <EditText
+        android:id="@+id/preparationMinutes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timelabel"
+        android:inputType="number"
+        android:hint="@string/add_recipe_preparationMinutes"/>
+
+    <EditText
+        android:id="@+id/cookingMinutes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/preparationMinutes"
+        android:inputType="number"
+        android:hint="@string/add_recipe_cookingMinutes"/>
+
+    <TextView
+        android:id="@+id/ingredientslabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cookingMinutes"
+        android:text="@string/add_recipe_ingredientslabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <EditText
+        android:id="@+id/ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_below="@+id/ingredientslabel"
+        android:lines="4"
+        android:gravity="top|left"
+        android:hint="@string/add_recipe_ingredients"
+        />
+
+    <TextView
+        android:id="@+id/stepslabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredients"
+        android:text="@string/add_recipe_stepslabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <EditText
+        android:id="@+id/steps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:layout_below="@+id/stepslabel"
+        android:lines="4"
+        android:gravity="top|left"
+        android:hint="@string/add_recipe_steps"
+        />
+
+    <Button
+        android:id="@+id/addbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/steps"
+        android:text="@string/add_recipe_addbutton"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/orangebasic"/>
+
+
+
+</RelativeLayout>
+
+</ScrollView>

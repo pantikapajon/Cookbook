@@ -13,5 +13,19 @@
     <string name="password">Password</string>
     <string name="email">E-mail</string>
     <string name="login">Log in</string>
+    <string name="add_recipe_header">Add Recipe</string>
+    <string name="add_recipe_title">Title</string>
+    <string name="add_recipe_introduction">Introduction</string>
+    <string name="add_recipe_servings">Number of servings</string>
+    <string name="add_recipe_ingredientslabel">Ingredients</string>
+    <string name="add_recipe_ingredients">1. Add list of ingredients</string>
+    <string name="add_recipe_stepslabel">Steps</string>
+    <string name="add_recipe_steps">1. Add list of steps</string>
+    <string name="add_recipe_timelabel">Time Information</string>
+    <string name="add_recipe_preparationMinutes">Preparation Time (minutes)</string>
+    <string name="add_recipe_cookingMinutes">Cooking Time (minutes)</string>
+    <string name="add_recipe_addbutton">Confirm</string>
+    <string name="add_recipe_toast_added">Recipe added</string>
+
 
 </resources>

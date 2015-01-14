@@ -3,6 +3,7 @@ package com.pbylicki.cookbook;
 import com.pbylicki.cookbook.data.EmailAndPassword;
 import com.pbylicki.cookbook.data.Person;
 import com.pbylicki.cookbook.data.PhoneBook;
+import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 
@@ -20,9 +21,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 public interface CookbookRestClient extends RestClientHeaders {
     @Get("/db/recipes")
     RecipeList getRecipeList();
-    @Post("/db/person")
+    @Post("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
-    void addPhoneBookEntry(Person person);
+    void addRecipeEntry(Recipe recipe);
     @Put("/db/person")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void editPhoneBookEntry(Person person);

@@ -15,6 +15,8 @@ import android.view.Menu;
 
 import com.pbylicki.cookbook.adapter.TabsPagerAdapter;
 
+import org.androidannotations.annotations.EActivity;
+
 public class MyActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
@@ -79,6 +81,10 @@ public class MyActivity extends FragmentActivity implements
 
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+    }
+
+    public String getSomeData(int i){
+        return tabs[i];
     }
 
 }
