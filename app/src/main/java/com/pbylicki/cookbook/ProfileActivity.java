@@ -1,34 +1,46 @@
 package com.pbylicki.cookbook;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.pbylicki.cookbook.adapter.TabsPagerAdapter;
+import com.pbylicki.cookbook.data.Recipe;
+import com.pbylicki.cookbook.data.RecipeList;
+import com.pbylicki.cookbook.data.User;
+
+import java.util.List;
 
 
-public class MyActivity extends FragmentActivity implements
+public class ProfileActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = { "Top Rated", "Games", "Movies" };
+    private String[] tabs = { "User Details", "User Recipes", "Favourites" };
+
+    User user;
+
+    List<Recipe> recipeList;
+    RestProfileBackgroundTask restBackgroundTask;
+    ProgressDialog ringProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+        Intent intent = getIntent();
+        user = (User) intent.getSerializableExtra(BrowseActivity_.USER);
 
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -65,6 +77,13 @@ public class MyActivity extends FragmentActivity implements
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+
+        restBackgroundTask = new RestProfileBackgroundTask();
+        ringProgressDialog = new ProgressDialog(this);
+        ringProgressDialog.setMessage("Downloading recipes...");
+        ringProgressDialog.setIndeterminate(true);
+        ringProgressDialog.show();
+        //restBackgroundTask.getRecipeList();
     }
 
     @Override
@@ -82,8 +101,19 @@ public class MyActivity extends FragmentActivity implements
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
     }
 
-    public String getSomeData(int i){
-        return tabs[i];
+    public void showError(Exception e) {
+        ringProgressDialog.dismiss();
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        e.printStackTrace();
+    }
+
+    public void updateRecipeList(RecipeList list) {
+        ringProgressDialog.dismiss();
+        recipeList.addAll(list.records);
+    }
+
+    public List<Recipe> getRecipeList(){
+        return recipeList;
     }
 
 }

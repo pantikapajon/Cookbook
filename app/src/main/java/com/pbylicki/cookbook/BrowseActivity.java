@@ -26,6 +26,7 @@ import org.androidannotations.annotations.ViewById;
 public class BrowseActivity extends Activity {
 
     public static final int REQUESTCODE = 42;
+    public static final String USER = "user";
     @ViewById
     ListView list;
 
@@ -74,6 +75,9 @@ public class BrowseActivity extends Activity {
     @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
         Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(USER, user);
+        startActivity(intent);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -81,7 +85,6 @@ public class BrowseActivity extends Activity {
         if (requestCode == REQUESTCODE) {
             if(resultCode == RESULT_OK){
                 user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                Toast.makeText(this, user.sessionId, Toast.LENGTH_LONG).show();
                 AddRecipeActivity_.intent(this).user(user).start();
             }
             if (resultCode == RESULT_CANCELED) {

@@ -14,6 +14,7 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @EBean
@@ -26,6 +27,7 @@ public class RecipeListAdapter extends BaseAdapter {
     public void update(RecipeList recipeList) {
         recipes.clear();
         recipes.addAll(recipeList.records);
+        Collections.sort(recipes);
         notifyDataSetChanged();
     }
     @Override

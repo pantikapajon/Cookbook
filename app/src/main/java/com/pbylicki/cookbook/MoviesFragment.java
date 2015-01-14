@@ -5,10 +5,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.pbylicki.cookbook.data.Recipe;
+
+import java.util.List;
 
 public class MoviesFragment extends Fragment {
 
+    List<Recipe> recipeList;
     private TextView txt;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,7 +31,8 @@ public class MoviesFragment extends Fragment {
     public void onStart(){
         super.onStart();
         txt = (TextView)getActivity().findViewById(R.id.txt);
-        MyActivity activity = (MyActivity)getActivity();
-        txt.setText(activity.getSomeData(2));
+        ProfileActivity activity = (ProfileActivity)getActivity();
+        //recipeList.addAll(activity.getRecipeList());
+        //txt.setText(recipeList.get(0).title);
     }
 }

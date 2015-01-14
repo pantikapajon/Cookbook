@@ -33,6 +33,7 @@ public class Recipe implements Serializable, Comparable<Recipe> {
 
     @Override
     public int compareTo(Recipe recipe) {
-        return getCreatedDate().compareTo(recipe.getCreatedDate());
+        //from newest to oldest
+        return -getCreatedDate().compareTo(recipe.getCreatedDate());
     }
 }

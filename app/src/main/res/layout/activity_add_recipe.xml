@@ -84,7 +84,7 @@
         android:layout_below="@+id/ingredientslabel"
         android:lines="4"
         android:gravity="top|left"
-        android:hint="@string/add_recipe_ingredients"
+        android:hint="@string/add_recipe_ingredientslabel"
         />
 
     <TextView
@@ -107,7 +107,7 @@
         android:layout_below="@+id/stepslabel"
         android:lines="4"
         android:gravity="top|left"
-        android:hint="@string/add_recipe_steps"
+        android:hint="@string/add_recipe_stepslabel"
         />
 
     <Button

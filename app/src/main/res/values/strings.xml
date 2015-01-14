@@ -26,6 +26,6 @@
     <string name="add_recipe_cookingMinutes">Cooking Time (minutes)</string>
     <string name="add_recipe_addbutton">Confirm</string>
     <string name="add_recipe_toast_added">Recipe added</string>
-
+    <string name="add_recipe_toast_required">The following field is required: </string>
 
 </resources>

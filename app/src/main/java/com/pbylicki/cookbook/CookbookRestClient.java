@@ -1,6 +1,10 @@
 package com.pbylicki.cookbook;
 
+import com.pbylicki.cookbook.data.Comment;
+import com.pbylicki.cookbook.data.CommentList;
 import com.pbylicki.cookbook.data.EmailAndPassword;
+import com.pbylicki.cookbook.data.Like;
+import com.pbylicki.cookbook.data.LikeList;
 import com.pbylicki.cookbook.data.Person;
 import com.pbylicki.cookbook.data.PhoneBook;
 import com.pbylicki.cookbook.data.Recipe;
@@ -24,12 +28,37 @@ public interface CookbookRestClient extends RestClientHeaders {
     @Post("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void addRecipeEntry(Recipe recipe);
-    @Put("/db/person")
+    @Put("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
-    void editPhoneBookEntry(Person person);
-    @Delete("/db/person/{id}")
+    void editRecipeEntry(Recipe recipe);
+    @Delete("/db/recipes/{id}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
-    void deletePhoneBookEntry(Integer id);
+    void deleteRecipeEntry(Integer id);
+
+    @Get("/db/comments")
+    CommentList getCommentList();
+    @Post("/db/comments")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void addCommentEntry(Comment comment);
+    @Put("/db/comments")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void editCommentEntry(Comment comment);
+    @Delete("/db/comments/{id}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void deleteCommentEntry(Integer id);
+
+    @Get("/db/likes")
+    LikeList getLikeList();
+    @Post("/db/likes")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void addLikeEntry(Like like);
+    @Put("/db/likes")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void editLikeEntry(Like like);
+    @Delete("/db/likes/{id}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void deleteLikeEntry(Integer id);
+
     @Post("/user/session")
     User login(EmailAndPassword emailAndPassword);
 }
