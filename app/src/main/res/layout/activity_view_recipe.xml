@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:text="View Recipe"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:src="@drawable/meal"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dip"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:hint="@string/add_recipe_created_date"
+        android:layout_below="@+id/image"/>
+    <TextView
+        android:id="@+id/introduction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/created"/>
+    <TextView
+        android:id="@+id/servings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_recipe_servings"
+        android:layout_below="@+id/introduction"/>
+
+    <TextView
+        android:id="@+id/timelabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/servings"
+        android:text="@string/add_recipe_timelabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/preparationMinutes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timelabel"
+        android:hint="@string/add_recipe_preparationMinutes"/>
+
+    <TextView
+        android:id="@+id/cookingMinutes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/preparationMinutes"
+        android:hint="@string/add_recipe_cookingMinutes"/>
+
+    <TextView
+        android:id="@+id/ingredientslabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cookingMinutes"
+        android:text="@string/add_recipe_ingredientslabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredientslabel"
+        android:lines="4"
+        android:hint="@string/add_recipe_ingredientslabel"
+        />
+
+    <TextView
+        android:id="@+id/stepslabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredients"
+        android:text="@string/add_recipe_stepslabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/steps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stepslabel"
+        android:lines="4"
+        android:hint="@string/add_recipe_stepslabel"
+        />
+
+    <TextView
+        android:id="@+id/commentslabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/steps"
+        android:text="@string/view_recipe_commentlabel"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:padding="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/commentlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/commentslabel">
+        <EditText
+            android:id="@+id/newcomment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".70"
+            android:inputType="textMultiLine"
+            android:lines="3"
+            android:gravity="top|left"
+            android:hint="@string/view_recipe_comment_field"/>
+        <Button
+            android:id="@+id/commentbtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="@string/view_recipe_comment_button"
+            android:textColor="@color/white"
+            android:background="@color/orangebasic"/>
+        </LinearLayout>
+    <ListView
+        android:id="@+id/commentlist"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/commentlayout"/>
+
+
+
+</RelativeLayout>
+
+</ScrollView>

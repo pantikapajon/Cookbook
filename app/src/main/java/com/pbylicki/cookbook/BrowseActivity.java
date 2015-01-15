@@ -3,11 +3,13 @@ package com.pbylicki.cookbook;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pbylicki.cookbook.adapter.RecipeListAdapter;
+import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 
@@ -15,6 +17,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
@@ -27,6 +30,7 @@ public class BrowseActivity extends Activity {
 
     public static final int REQUESTCODE = 42;
     public static final String USER = "user";
+    public static final String RECIPE = "recipe";
     @ViewById
     ListView list;
 
@@ -62,6 +66,14 @@ public class BrowseActivity extends Activity {
     public void updateRecipeList(RecipeList recipeList) {
         ringProgressDialog.dismiss();
         adapter.update(recipeList);
+    }
+
+    @ItemClick
+    void listItemClicked(Recipe item){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        bundle.putSerializable(RECIPE, item);
+        ViewRecipeActivity_.intent(this).bundle(bundle).start();
     }
 
     @OptionsItem(R.id.action_add)

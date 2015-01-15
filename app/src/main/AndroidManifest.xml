@@ -19,6 +19,7 @@
         <activity android:name=".MyActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".AddRecipeActivity_"/>
+        <activity android:name=".ViewRecipeActivity_"/>
         <activity android:name=".LoginActivity_"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"/>
     </application>
