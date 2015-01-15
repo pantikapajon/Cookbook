@@ -37,6 +37,8 @@ public interface CookbookRestClient extends RestClientHeaders {
 
     @Get("/db/comments")
     CommentList getCommentList();
+    @Get("/db/comments?filter={path}")
+    CommentList getCommentListForRecipe(String path);
     @Post("/db/comments")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void addCommentEntry(Comment comment);

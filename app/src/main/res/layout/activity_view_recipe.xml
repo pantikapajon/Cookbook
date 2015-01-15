@@ -16,29 +16,89 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:src="@drawable/meal"
-        android:layout_below="@+id/title"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dip"
-        android:layout_centerHorizontal="true"
-        />
-
     <TextView
         android:id="@+id/created"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:hint="@string/add_recipe_created_date"
-        android:layout_below="@+id/image"/>
+        android:layout_below="@+id/title"/>
+
+    <com.daimajia.swipe.SwipeLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/created"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <RelativeLayout
+            android:id="@+id/surface_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/view_profile_swipe_height"
+
+            android:padding="0dp">
+
+            <ImageButton
+                android:id="@+id/likebutton"
+                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_height="@dimen/view_profile_swipe_height"
+                android:src="@drawable/ic_action_important"
+                android:background="@color/orangebasic"/>
+            <ImageButton
+                android:id="@+id/editbutton"
+                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_height="@dimen/view_profile_swipe_height"
+                android:layout_toRightOf="@+id/likebutton"
+                android:src="@drawable/ic_action_edit"
+                android:background="@color/orangebasic"/>
+            <ImageButton
+                android:id="@+id/deletebutton"
+                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_height="@dimen/view_profile_swipe_height"
+                android:src="@drawable/ic_action_discard"
+                android:layout_toRightOf="@+id/editbutton"
+                android:background="@color/orangebasic"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bottom_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_height="@dimen/view_profile_swipe_height"
+                android:src="@drawable/meal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dip"
+                android:layout_centerHorizontal="true"
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="128dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/orangebasic">
+                <ImageView
+                android:id="@+id/options_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_previous_item"
+                />
+            </RelativeLayout>
+
+        </RelativeLayout>
+        </com.daimajia.swipe.SwipeLayout>
+
     <TextView
         android:id="@+id/introduction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/created"/>
+        android:layout_below="@+id/swipe_layout"
+        android:textStyle="italic"
+        android:textSize="14dp"/>
     <TextView
         android:id="@+id/servings"
         android:layout_width="match_parent"

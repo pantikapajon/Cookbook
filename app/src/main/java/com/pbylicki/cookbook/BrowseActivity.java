@@ -78,7 +78,7 @@ public class BrowseActivity extends Activity {
 
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
-
+        //User must be logged in to start Activity
         if(user == null) LoginActivity_.intent(this).startForResult(REQUESTCODE);
         else AddRecipeActivity_.intent(this).user(user).start();
 

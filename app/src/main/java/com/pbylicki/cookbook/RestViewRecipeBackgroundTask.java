@@ -1,5 +1,7 @@
 package com.pbylicki.cookbook;
 
+import com.pbylicki.cookbook.data.Comment;
+import com.pbylicki.cookbook.data.CommentList;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.User;
 
@@ -17,22 +19,36 @@ public class RestViewRecipeBackgroundTask {
     @RestService
     CookbookRestClient restClient;
     @Background
-    void addRecipe(User user, Recipe recipe) {
+    void getComments(Recipe recipe) {
+        try {
+            restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
+            CommentList commentList = restClient.getCommentListForRecipe("recipeId=" + Integer.toString(recipe.id));
+            publishResult(commentList);
+        } catch (Exception e) {
+            publishError(e);
+        }
+    }
+    @Background
+    void postComment(User user, Comment comment) {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
-            restClient.addRecipeEntry(recipe);
-            publishResult();
+            restClient.addCommentEntry(comment);
+            publishResultPost();
         } catch (Exception e) {
             publishError(e);
         }
     }
     @UiThread
-    void publishResult() {
-        //activity.addSuccess();
+    void publishResult(CommentList commentList) {
+        activity.updateCommentList(commentList);
     }
     @UiThread
     void publishError(Exception e) {
-        //activity.addError(e);
+        activity.showError(e);
+    }
+    @UiThread
+    void publishResultPost() {
+        activity.updateCommentListAfterPost();
     }
 }

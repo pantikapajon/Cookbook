@@ -25,7 +25,8 @@ public class Comment implements Comparable<Comment> {
 
     @Override
     public int compareTo(Comment comment) {
-        return getCreatedDate().compareTo(comment.getCreatedDate());
+        //from newest to oldest
+        return -getCreatedDate().compareTo(comment.getCreatedDate());
     }
 }
 

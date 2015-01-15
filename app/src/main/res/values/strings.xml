@@ -31,5 +31,6 @@
     <string name="view_recipe_commentlabel">Comments</string>
     <string name="view_recipe_comment_field">New Comment</string>
     <string name="view_recipe_comment_button">Add</string>
+    <string name="view_recipe_comment_nonempty">You can\'t add empty comment.</string>
 
 </resources>
