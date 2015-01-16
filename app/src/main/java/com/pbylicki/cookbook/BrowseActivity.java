@@ -68,6 +68,7 @@ public class BrowseActivity extends Activity {
         adapter.update(recipeList);
     }
 
+
     @ItemClick
     void listItemClicked(Recipe item){
         Bundle bundle = new Bundle();

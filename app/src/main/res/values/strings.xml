@@ -32,5 +32,7 @@
     <string name="view_recipe_comment_field">New Comment</string>
     <string name="view_recipe_comment_button">Add</string>
     <string name="view_recipe_comment_nonempty">You can\'t add empty comment.</string>
+    <string name="view_recipe_recipe_deleted">Recipe deleted.</string>
+    <string name="view_recipe_action_denied">You are not authorized to do this action.</string>
 
 </resources>

@@ -48,6 +48,9 @@ public interface CookbookRestClient extends RestClientHeaders {
     @Delete("/db/comments/{id}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void deleteCommentEntry(Integer id);
+    @Delete("/db/comments?filter={path}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void deleteCommentEntryForRecipe(String path);
 
     @Get("/db/likes")
     LikeList getLikeList();

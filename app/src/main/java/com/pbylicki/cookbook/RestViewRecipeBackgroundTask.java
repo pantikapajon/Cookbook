@@ -39,6 +39,19 @@ public class RestViewRecipeBackgroundTask {
             publishError(e);
         }
     }
+    @Background
+    void deleteRecipe(User user, Recipe recipe) {
+        try {
+            restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
+            restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
+            //delete likes and picture
+            restClient.deleteCommentEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
+            restClient.deleteRecipeEntry(recipe.id);
+            publishResultDelete();
+        } catch (Exception e) {
+            publishError(e);
+        }
+    }
     @UiThread
     void publishResult(CommentList commentList) {
         activity.updateCommentList(commentList);
@@ -50,5 +63,9 @@ public class RestViewRecipeBackgroundTask {
     @UiThread
     void publishResultPost() {
         activity.updateCommentListAfterPost();
+    }
+    @UiThread
+    void publishResultDelete() {
+        activity.deleteRecipeSuccess();
     }
 }

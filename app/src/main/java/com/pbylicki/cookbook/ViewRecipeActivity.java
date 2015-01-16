@@ -32,6 +32,7 @@ import org.androidannotations.annotations.ViewById;
 public class ViewRecipeActivity extends Activity {
 
     public static final int COMMENT_REQUESTCODE = 44;
+    public static final int DELETE_RECIPE_REQUESTCODE = 46;
     @Extra
     Bundle bundle;
 
@@ -104,6 +105,26 @@ public class ViewRecipeActivity extends Activity {
         newcomment.setText("");
         restBackgroundTask.getComments(recipe);
     }
+    public void deleteRecipeSuccess(){
+        ringProgressDialog.dismiss();
+        Toast.makeText(this, getString(R.string.view_recipe_recipe_deleted), Toast.LENGTH_LONG).show();
+        BrowseActivity_.intent(this).user(user).start();
+    }
+
+    @Click
+    void deletebuttonClicked(){
+        if(user == null) {
+            LoginActivity_.intent(this).startForResult(DELETE_RECIPE_REQUESTCODE);
+        } else {
+            if (Integer.toString(user.id) == Integer.toString(recipe.ownerId)) {
+                ringProgressDialog.setMessage("Removing Recipe...");
+                ringProgressDialog.show();
+                restBackgroundTask.deleteRecipe(user, recipe);
+            } else {
+                Toast.makeText(this, getString(R.string.view_recipe_action_denied), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     @Click
     void commentbtnClicked(){
@@ -152,6 +173,15 @@ public class ViewRecipeActivity extends Activity {
                 user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
                 ringProgressDialog.show();
                 restBackgroundTask.postComment(user, getNewComment());
+            }
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == DELETE_RECIPE_REQUESTCODE) {
+            if(resultCode == RESULT_OK){
+                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+                deletebuttonClicked();
             }
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
