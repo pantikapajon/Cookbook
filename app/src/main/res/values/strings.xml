@@ -33,6 +33,10 @@
     <string name="view_recipe_comment_button">Add</string>
     <string name="view_recipe_comment_nonempty">You can\'t add empty comment.</string>
     <string name="view_recipe_recipe_deleted">Recipe deleted.</string>
+    <string name="view_recipe_like_added">You liked this Recipe.</string>
+    <string name="view_recipe_like_deleted">You unliked this Recipe.</string>
     <string name="view_recipe_action_denied">You are not authorized to do this action.</string>
+    <string name="edit_recipe_header">Edit Recipe</string>
+    <string name="edit_recipe_toast_edited">Recipe edited</string>
 
 </resources>

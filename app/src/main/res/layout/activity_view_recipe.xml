@@ -42,7 +42,7 @@
                 android:id="@+id/likebutton"
                 android:layout_width="@dimen/view_profile_swipe_height"
                 android:layout_height="@dimen/view_profile_swipe_height"
-                android:src="@drawable/ic_action_important"
+                android:src="@drawable/ic_action_good"
                 android:background="@color/orangebasic"/>
             <ImageButton
                 android:id="@+id/editbutton"

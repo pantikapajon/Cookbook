@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.pbylicki.cookbook.adapter.CommentListAdapter;
 import com.pbylicki.cookbook.data.Comment;
 import com.pbylicki.cookbook.data.CommentList;
+import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
@@ -27,12 +29,16 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.HashSet;
+
 @EActivity(R.layout.activity_view_recipe)
 @OptionsMenu(R.menu.menu_browse)
 public class ViewRecipeActivity extends Activity {
 
     public static final int COMMENT_REQUESTCODE = 44;
     public static final int DELETE_RECIPE_REQUESTCODE = 46;
+    public static final int EDIT_RECIPE_REQUESTCODE = 48;
+    public static final int LIKE_RECIPE_REQUESTCODE = 50;
     @Extra
     Bundle bundle;
 
@@ -58,6 +64,8 @@ public class ViewRecipeActivity extends Activity {
     EditText newcomment;
     @ViewById
     ListView commentlist;
+    @ViewById
+    ImageButton likebutton;
 
     @Bean
     CommentListAdapter adapter;
@@ -66,6 +74,8 @@ public class ViewRecipeActivity extends Activity {
     RestViewRecipeBackgroundTask restBackgroundTask;
     Recipe recipe;
     User user;
+    //Stores unique likes' ownerIds for recipe
+    HashSet<Integer> likeHash;
     ProgressDialog ringProgressDialog;
 
     @AfterViews
@@ -109,6 +119,50 @@ public class ViewRecipeActivity extends Activity {
         ringProgressDialog.dismiss();
         Toast.makeText(this, getString(R.string.view_recipe_recipe_deleted), Toast.LENGTH_LONG).show();
         BrowseActivity_.intent(this).user(user).start();
+    }
+    public void setLikeHash(HashSet<Integer> likeHash){
+        this.likeHash = likeHash;
+        if (user != null) switchLikeButton(likeHash.contains(user.id));
+    }
+    public void postLikeSuccess(){
+        likeHash.add(user.id);
+        switchLikeButton(likeHash.contains(user.id));
+        Toast.makeText(this, getString(R.string.view_recipe_like_added), Toast.LENGTH_LONG).show();
+    }
+    public void deleteLikeSuccess(){
+        likeHash.remove(user.id);
+        switchLikeButton(likeHash.contains(user.id));
+        Toast.makeText(this, getString(R.string.view_recipe_like_deleted), Toast.LENGTH_LONG).show();
+    }
+
+    @Click
+    void likebuttonClicked(){
+        if(user == null) {
+            LoginActivity_.intent(this).startForResult(LIKE_RECIPE_REQUESTCODE);
+        } else if (!likeHash.contains(user.id)) {
+            Like like = new Like();
+            like.ownerId = user.id;
+            like.recipeId = recipe.id;
+            restBackgroundTask.postLike(user, like);
+        } else {
+            restBackgroundTask.deleteLike(user, recipe);
+        }
+    }
+
+    @Click
+    void editbuttonClicked(){
+        if(user == null) {
+            LoginActivity_.intent(this).startForResult(EDIT_RECIPE_REQUESTCODE);
+        } else {
+            if (Integer.toString(user.id) == Integer.toString(recipe.ownerId)) {
+                Bundle editBundle = new Bundle();
+                editBundle.putSerializable(BrowseActivity_.USER, user);
+                editBundle.putSerializable(BrowseActivity_.RECIPE, recipe);
+                EditRecipeActivity_.intent(this).bundle(editBundle).start();
+            } else {
+                Toast.makeText(this, getString(R.string.view_recipe_action_denied), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Click
@@ -159,33 +213,25 @@ public class ViewRecipeActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == BrowseActivity_.REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                AddRecipeActivity_.intent(this).user(user).start();
-            }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == COMMENT_REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                ringProgressDialog.show();
-                restBackgroundTask.postComment(user, getNewComment());
-            }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
+        if(resultCode == RESULT_OK){
+            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            switchLikeButton(likeHash.contains(user.id));
+            switch (requestCode) {
+                case BrowseActivity_.REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
+                                                    break;
+                case COMMENT_REQUESTCODE:   ringProgressDialog.show();
+                                            restBackgroundTask.postComment(user, getNewComment());
+                                            break;
+                case DELETE_RECIPE_REQUESTCODE: deletebuttonClicked();
+                                                break;
+                case EDIT_RECIPE_REQUESTCODE:   editbuttonClicked();
+                                                break;
+                case LIKE_RECIPE_REQUESTCODE:   likebuttonClicked();
+                                                break;
             }
         }
-        if (requestCode == DELETE_RECIPE_REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                deletebuttonClicked();
-            }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
-            }
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -195,5 +241,9 @@ public class ViewRecipeActivity extends Activity {
         comment.recipeId = recipe.id;
         comment.text = newcomment.getText().toString();
         return comment;
+    }
+    private void switchLikeButton(Boolean test){
+        if(test) likebutton.setImageResource(R.drawable.ic_action_bad);
+        else likebutton.setImageResource(R.drawable.ic_action_good);
     }
 }

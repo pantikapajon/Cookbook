@@ -54,6 +54,8 @@ public interface CookbookRestClient extends RestClientHeaders {
 
     @Get("/db/likes")
     LikeList getLikeList();
+    @Get("/db/likes?filter={path}")
+    LikeList getLikeListForRecipe(String path);
     @Post("/db/likes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void addLikeEntry(Like like);
@@ -63,6 +65,9 @@ public interface CookbookRestClient extends RestClientHeaders {
     @Delete("/db/likes/{id}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void deleteLikeEntry(Integer id);
+    @Delete("/db/likes?filter={path}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void deleteLikeEntryForRecipe(String path);
 
     @Post("/user/session")
     User login(EmailAndPassword emailAndPassword);
