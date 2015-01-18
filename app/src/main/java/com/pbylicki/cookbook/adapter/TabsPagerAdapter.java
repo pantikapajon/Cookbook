@@ -1,8 +1,11 @@
 package com.pbylicki.cookbook.adapter;
 
+
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
 
 import com.pbylicki.cookbook.GamesFragment;
 import com.pbylicki.cookbook.MoviesFragment;

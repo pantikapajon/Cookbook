@@ -1,19 +1,16 @@
 package com.pbylicki.cookbook;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
 
 import com.pbylicki.cookbook.adapter.TabsPagerAdapter;
+import com.pbylicki.cookbook.data.RecipeList;
+import com.pbylicki.cookbook.data.User;
+import com.pbylicki.cookbook.data.UserInfo;
 
 
 public class MyActivity extends FragmentActivity implements
@@ -24,6 +21,10 @@ public class MyActivity extends FragmentActivity implements
     private ActionBar actionBar;
     // Tab titles
     private String[] tabs = { "Top Rated", "Games", "Movies" };
+    RecipeList recipeList;
+    RecipeList likeList;
+    User user;
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,12 @@ public class MyActivity extends FragmentActivity implements
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        Bundle bundle = getIntent().getExtras();
+        user = (User)bundle.getSerializable(ProfileActivity_.USER);
+        userInfo = (UserInfo)bundle.getSerializable(ProfileActivity_.USERINFO);
+        recipeList = (RecipeList)bundle.getSerializable(ProfileActivity_.RECIPELIST);
+        likeList = (RecipeList)bundle.getSerializable(ProfileActivity_.LIKELIST);
 
         // Adding Tabs
         for (String tab_name : tabs) {
@@ -85,5 +92,9 @@ public class MyActivity extends FragmentActivity implements
     public String getSomeData(int i){
         return tabs[i];
     }
+
+    public UserInfo getUserInfo(){ return this.userInfo;}
+    public RecipeList getRecipeList() { return this.recipeList; }
+    public RecipeList getLikeList() { return this.likeList; }
 
 }

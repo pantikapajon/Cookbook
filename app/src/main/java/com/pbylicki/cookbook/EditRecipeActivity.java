@@ -129,20 +129,12 @@ public class EditRecipeActivity extends Activity {
 
     @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
-        Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
+        else ProfileActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        /*if (requestCode == REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                AddRecipeActivity_.intent(this).user(user).start();
-            }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
-            }
-        }*/
         if(resultCode == RESULT_OK){
             user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
             switch (requestCode) {
@@ -150,6 +142,8 @@ public class EditRecipeActivity extends Activity {
                                     break;
                 case BrowseActivity_.LOGIN_REQUESTCODE: init();
                                                         break;
+                case BrowseActivity_.PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
+                                                            break;
                 default:            break;
             }
         }

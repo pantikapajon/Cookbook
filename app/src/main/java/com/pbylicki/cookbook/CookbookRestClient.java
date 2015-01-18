@@ -28,6 +28,8 @@ public interface CookbookRestClient extends RestClientHeaders {
     RecipeList getRecipeList();
     @Get("/db/recipes?filter={path}")
     RecipeList getRecipeListForOwner(String path);
+    @Get("/db/recipes?ids={path}")
+    RecipeList getRecipeListForIds(String path);
     @Post("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void addRecipeEntry(Recipe recipe);

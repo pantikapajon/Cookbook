@@ -16,10 +16,54 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"/>
 
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_below="@+id/username"
+            android:layout_marginLeft ="10dp"
+            android:layout_marginRight ="10dp"
+            android:layout_marginBottom ="15dp"
+            android:src="@drawable/persondefault"
+            android:scaleType="centerInside"
+            app:riv_oval="true"
+            />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username"
+            android:layout_toRightOf="@+id/avatar"
+            android:text="@string/profile_email"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/email"
+            android:layout_toRightOf="@+id/avatar"
+            android:text="@string/profile_created"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/last_modified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/created"
+            android:layout_toRightOf="@+id/avatar"
+            android:text="@string/profile_last_modified"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+
         <com.daimajia.swipe.SwipeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/username">
+            android:layout_below="@+id/avatar">
 
             <RelativeLayout
                 android:id="@+id/likewrapper"
@@ -49,8 +93,16 @@
                         android:layout_centerVertical="true"
                         android:textColor="@color/white"
                         android:textSize="18sp"
-                        android:text="Likes"/>
+                        android:text="@string/profile_likes"/>
                     </RelativeLayout>
+                <TextView
+                    android:id="@+id/likeempty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/likeheader"
+                    android:text="List is empty."
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible"/>
 
                 <ListView
                     android:id="@+id/likelist"
@@ -78,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="Recipes"
+                        android:text="@string/profile_recipes"
                         android:textColor="@color/white"
                         android:textSize="18sp"/>
                     <ImageView
@@ -91,6 +143,14 @@
                         />
                 </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/recipeempty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/recipeheader"
+                    android:text="List is empty."
+                    android:layout_centerHorizontal="true"
+                    android:visibility="invisible"/>
                 <ListView
                     android:id="@+id/recipelist"
                     android:layout_width="match_parent"

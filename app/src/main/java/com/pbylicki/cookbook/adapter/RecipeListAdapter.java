@@ -28,6 +28,8 @@ public class RecipeListAdapter extends BaseAdapter {
         recipes.clear();
         recipes.addAll(recipeList.records);
         Collections.sort(recipes);
+        //Cheat for ProfileActivity swipe layout
+        if (recipes.size()==0) recipes.add(new Recipe());
         notifyDataSetChanged();
     }
     @Override

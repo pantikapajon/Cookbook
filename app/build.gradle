@@ -37,6 +37,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     compile 'com.android.support:support-v4:20.+'
     compile "com.daimajia.swipelayout:library:1.1.7@aar"
+    compile 'com.makeramen:roundedimageview:1.5.0'
 }
 apt {
     arguments {

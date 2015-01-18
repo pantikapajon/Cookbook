@@ -17,7 +17,6 @@ import com.pbylicki.cookbook.data.Comment;
 import com.pbylicki.cookbook.data.CommentList;
 import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.Recipe;
-import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 import com.pbylicki.cookbook.data.UserInfo;
 
@@ -220,7 +219,6 @@ public class ViewRecipeActivity extends Activity {
         //User must be logged in to start Activity
         if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.REQUESTCODE);
         else AddRecipeActivity_.intent(this).user(user).start();
-
     }
 
     @OptionsItem(R.id.action_profile)

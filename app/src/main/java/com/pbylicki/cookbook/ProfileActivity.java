@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,13 +36,26 @@ public class ProfileActivity extends Activity {
     public static final int LOGIN_REQUESTCODE = 40;
     public static final String USER = "user";
     public static final String RECIPE = "recipe";
+    public static final String RECIPELIST = "recipelist";
+    public static final String LIKELIST = "likelist";
+    public static final String USERINFO = "userinfo";
 
     @ViewById
     TextView username;
     @ViewById
+    TextView email;
+    @ViewById
+    TextView created;
+    @ViewById
+    TextView last_modified;
+    @ViewById
     ListView likelist;
     @ViewById
     ListView recipelist;
+    @ViewById
+    TextView recipeempty;
+    @ViewById
+    TextView likeempty;
 
     @Extra
     User user;
@@ -60,6 +74,8 @@ public class ProfileActivity extends Activity {
     ProgressDialog ringProgressDialog;
 
     UserInfo userInfo;
+    RecipeList recipeList;
+    RecipeList likeList;
 
     @AfterViews
     void init() {
@@ -70,6 +86,7 @@ public class ProfileActivity extends Activity {
         ringProgressDialog.setIndeterminate(true);
         ringProgressDialog.show();
         restBackgroundTask.getUserInfoRecipeList(user);
+        restBackgroundTask.getLikeRecipeList(user);
     }
 
     public void showError(Exception e) {
@@ -80,21 +97,56 @@ public class ProfileActivity extends Activity {
 
     public void updateRecipeList(RecipeList recipeList) {
         ringProgressDialog.dismiss();
+        this.recipeList = recipeList;
         recipeadapter.update(recipeList);
+        if(recipeadapter.getCount() == 0) recipeempty.setVisibility(View.VISIBLE);
         ViewGroup.LayoutParams params = this.recipelist.getLayoutParams();
         int dim = (int)getResources().getDimension(R.dimen.recipe_list_item_height);
-        params.height = recipeadapter.getCount() * dim;
+        params.height = Math.max(recipeadapter.getCount() * dim, dim);
         this.recipelist.setLayoutParams(params);
+    }
+    public void updateLikeList(RecipeList recipeList) {
+        ringProgressDialog.dismiss();
+        this.likeList = recipeList;
+        likeadapter.update(recipeList);
+        if(likeadapter.getCount() == 0) likeempty.setVisibility(View.VISIBLE);
+        ViewGroup.LayoutParams params = this.likelist.getLayoutParams();
+        int dim = (int)getResources().getDimension(R.dimen.recipe_list_item_height);
+        params.height = likeadapter.getCount() * dim;
+        this.likelist.setLayoutParams(params);
     }
     public void updateUserInfo(UserInfo userInfo){
         this.userInfo = userInfo;
         username.setText(userInfo.display_name);
-        //Populate other textviews
+        email.setText(getString(R.string.profile_email) + userInfo.email);
+        created.setText(getString(R.string.profile_created) + userInfo.created_date);
+        last_modified.setText(getString(R.string.profile_last_modified) + userInfo.last_modified_date);
     }
+/*    @Click
+    void moveClicked(){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        bundle.putSerializable(USERINFO, userInfo);
+        bundle.putSerializable(RECIPELIST, recipeList);
+        bundle.putSerializable(LIKELIST, likeList);
+        Intent i = new Intent(this, MyActivity.class);
+        i.putExtras(bundle);
+        startActivity(i);
+    }*/
 
 
     @ItemClick
     void recipelistItemClicked(Recipe item){
+        if(item.id == null) return;
+        //Toast.makeText(this, Integer.toString(item.id)+Integer.toString(item.ownerId) , Toast.LENGTH_LONG).show();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        bundle.putSerializable(RECIPE, item);
+        ViewRecipeActivity_.intent(this).bundle(bundle).start();
+    }
+    @ItemClick
+    void likelistItemClicked(Recipe item){
+        if(item.id == null) return;
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         bundle.putSerializable(RECIPE, item);

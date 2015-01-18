@@ -3,14 +3,10 @@ package com.pbylicki.cookbook;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.pbylicki.cookbook.adapter.RecipeListAdapter;
 import com.pbylicki.cookbook.data.Recipe;
-import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 
 import org.androidannotations.annotations.AfterViews;
@@ -21,7 +17,6 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_add_recipe)
@@ -96,22 +91,43 @@ public class AddRecipeActivity extends Activity {
         BrowseActivity_.intent(this).user(user).start();
     }
 
+    @OptionsItem(R.id.action_login)
+    void actionLoginSelected(){
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.LOGIN_REQUESTCODE);
+        else Toast.makeText(this, getString(R.string.user_already_logged_in), Toast.LENGTH_LONG).show();
+    }
+
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
-
         if(user == null) LoginActivity_.intent(this).startForResult(REQUESTCODE);
         else AddRecipeActivity_.intent(this).user(user).start();
-
     }
 
     @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
-        Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
+        else ProfileActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUESTCODE) {
+        if(resultCode == RESULT_OK){
+            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            switch (requestCode) {
+                case REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
+                    break;
+                case BrowseActivity_.LOGIN_REQUESTCODE: init();
+                    break;
+                case BrowseActivity_.PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
+                    break;
+                default:            break;
+            }
+        }
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
+        }
+
+        /*if (requestCode == REQUESTCODE) {
             if(resultCode == RESULT_OK){
                 user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
                 AddRecipeActivity_.intent(this).user(user).start();
@@ -119,7 +135,7 @@ public class AddRecipeActivity extends Activity {
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
             }
-        }
+        }*/
     }
 
     private boolean isEmpty(EditText editText) {
