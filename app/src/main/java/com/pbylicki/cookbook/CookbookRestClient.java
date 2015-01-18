@@ -5,11 +5,12 @@ import com.pbylicki.cookbook.data.CommentList;
 import com.pbylicki.cookbook.data.EmailAndPassword;
 import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.LikeList;
-import com.pbylicki.cookbook.data.Person;
-import com.pbylicki.cookbook.data.PhoneBook;
+import com.pbylicki.cookbook.data.Picture;
+import com.pbylicki.cookbook.data.PictureList;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
+import com.pbylicki.cookbook.data.UserInfo;
 
 import org.androidannotations.annotations.rest.Delete;
 import org.androidannotations.annotations.rest.Get;
@@ -25,6 +26,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 public interface CookbookRestClient extends RestClientHeaders {
     @Get("/db/recipes")
     RecipeList getRecipeList();
+    @Get("/db/recipes?filter={path}")
+    RecipeList getRecipeListForOwner(String path);
     @Post("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void addRecipeEntry(Recipe recipe);
@@ -68,6 +71,15 @@ public interface CookbookRestClient extends RestClientHeaders {
     @Delete("/db/likes?filter={path}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void deleteLikeEntryForRecipe(String path);
+
+    @Get("/db/pictures/{id}")
+    Picture getPictureById(int id);
+    @Get("/db/pictures?filter={path}")
+    PictureList getPictureListForRecipe(String path);
+
+    @Get("/system/user/{id}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    UserInfo getUserInfo(Integer id);
 
     @Post("/user/session")
     User login(EmailAndPassword emailAndPassword);

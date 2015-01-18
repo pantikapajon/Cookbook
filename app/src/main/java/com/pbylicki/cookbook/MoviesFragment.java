@@ -30,8 +30,8 @@ public class MoviesFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        txt = (TextView)getActivity().findViewById(R.id.txt);
-        ProfileActivity activity = (ProfileActivity)getActivity();
+        //txt = (TextView)getActivity().findViewById(R.id.txt);
+        //ProfileActivity activity = (ProfileActivity)getActivity();
         //recipeList.addAll(activity.getRecipeList());
         //txt.setText(recipeList.get(0).title);
     }

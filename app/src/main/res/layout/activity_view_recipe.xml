@@ -15,19 +15,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
-
+    <LinearLayout
+        android:id="@+id/createdauthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title">
     <TextView
         android:id="@+id/created"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
         android:layout_height="wrap_content"
         android:hint="@string/add_recipe_created_date"
-        android:layout_below="@+id/title"/>
+        android:ellipsize="end"
+        android:singleLine="true"/>
 
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:hint="@string/view_recipe_author"
+        android:ellipsize="end"
+        android:singleLine="true"/>
+    </LinearLayout>
     <com.daimajia.swipe.SwipeLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/created"
+        android:layout_below="@+id/createdauthor"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
@@ -35,29 +50,35 @@
             android:id="@+id/surface_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/view_profile_swipe_height"
-
+            android:background="@color/orangebasic"
             android:padding="0dp">
 
             <ImageButton
                 android:id="@+id/likebutton"
-                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/view_profile_swipe_height"
                 android:src="@drawable/ic_action_good"
-                android:background="@color/orangebasic"/>
+                android:background="@color/orangebasic"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
             <ImageButton
                 android:id="@+id/editbutton"
-                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/view_profile_swipe_height"
                 android:layout_toRightOf="@+id/likebutton"
                 android:src="@drawable/ic_action_edit"
-                android:background="@color/orangebasic"/>
+                android:background="@color/orangebasic"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
             <ImageButton
                 android:id="@+id/deletebutton"
-                android:layout_width="@dimen/view_profile_swipe_height"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/view_profile_swipe_height"
                 android:src="@drawable/ic_action_discard"
                 android:layout_toRightOf="@+id/editbutton"
-                android:background="@color/orangebasic"/>
+                android:background="@color/orangebasic"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
 
         </RelativeLayout>
 

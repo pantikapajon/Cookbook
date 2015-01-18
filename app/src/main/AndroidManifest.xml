@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyActivity"/>
-        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".ProfileActivity_"/>
         <activity android:name=".AddRecipeActivity_"/>
         <activity android:name=".EditRecipeActivity_"/>
         <activity android:name=".ViewRecipeActivity_"/>

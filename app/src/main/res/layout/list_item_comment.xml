@@ -12,20 +12,24 @@
     <TextView
         android:id="@+id/author"
         android:layout_width="0dp"
-        android:layout_weight=".7"
+        android:layout_weight=".65"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="Author"
-        android:textSize="20sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="16sp"
         />
     <TextView
         android:id="@+id/date"
         android:layout_width="0dp"
-        android:layout_weight="0.3"
+        android:layout_weight="0.35"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/author"
         android:layout_alignParentRight="true"
         android:text="Date"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textSize="12sp"
         />
     </LinearLayout>
@@ -36,7 +40,7 @@
         android:layout_below="@id/commentheader"
         android:text="Text"
         android:textStyle="italic"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:ellipsize="end"
         />
 

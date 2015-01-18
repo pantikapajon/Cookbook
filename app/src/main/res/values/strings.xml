@@ -28,6 +28,7 @@
     <string name="add_recipe_addbutton">Confirm</string>
     <string name="add_recipe_toast_added">Recipe added</string>
     <string name="add_recipe_toast_required">The following field is required: </string>
+    <string name="view_recipe_author">by </string>
     <string name="view_recipe_commentlabel">Comments</string>
     <string name="view_recipe_comment_field">New Comment</string>
     <string name="view_recipe_comment_button">Add</string>
@@ -38,5 +39,6 @@
     <string name="view_recipe_action_denied">You are not authorized to do this action.</string>
     <string name="edit_recipe_header">Edit Recipe</string>
     <string name="edit_recipe_toast_edited">Recipe edited</string>
+    <string name="user_already_logged_in">You are logged in.</string>
 
 </resources>

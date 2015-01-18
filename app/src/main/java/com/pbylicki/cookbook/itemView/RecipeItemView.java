@@ -1,6 +1,7 @@
 package com.pbylicki.cookbook.itemView;
 
 import android.content.Context;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,11 +14,15 @@ import org.androidannotations.annotations.ViewById;
 @EViewGroup(R.layout.list_item_recipe)
 public class RecipeItemView extends RelativeLayout {
     @ViewById
+    ImageView image;
+    @ViewById
     TextView title;
     @ViewById
     TextView introduction;
     @ViewById
     TextView date;
+    @ViewById
+    TextView author;
 
     public RecipeItemView(Context context) {
         super(context);
@@ -26,5 +31,10 @@ public class RecipeItemView extends RelativeLayout {
         title.setText(recipe.title);
         introduction.setText(recipe.introduction);
         date.setText(recipe.getCreatedDate().toString());
+
+        if(recipe.pictureBytes != null) recipe.decodeAndSetImage(image);
+
+        if(recipe.author != null) author.setText("by "+ recipe.author);
+        else author.setText("by User "+ Integer.toString(recipe.ownerId));
     }
 }

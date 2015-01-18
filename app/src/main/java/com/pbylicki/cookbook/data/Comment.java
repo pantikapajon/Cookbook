@@ -1,5 +1,6 @@
 package com.pbylicki.cookbook.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.text.SimpleDateFormat;
@@ -12,6 +13,8 @@ public class Comment implements Comparable<Comment> {
     public Integer ownerId;
     public String text;
     public String created;
+    @JsonIgnore
+    public String author;
 
     public Date getCreatedDate(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

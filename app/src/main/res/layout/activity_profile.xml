@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/username"
+            android:text="Username"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"/>
+
+        <com.daimajia.swipe.SwipeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/username">
+
+            <RelativeLayout
+                android:id="@+id/likewrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/likeheader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orangebasic"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/likeswitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/ic_action_next_item"
+                        />
+                    <TextView
+                        android:id="@+id/liketitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:text="Likes"/>
+                    </RelativeLayout>
+
+                <ListView
+                    android:id="@+id/likelist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/likeheader"/>
+
+                </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/recipewrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/recipeheader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orangebasic"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/recipetitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="Recipes"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"/>
+                    <ImageView
+                        android:id="@+id/recipeswitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_action_previous_item"
+                        />
+                </RelativeLayout>
+
+                <ListView
+                    android:id="@+id/recipelist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/recipeheader"/>
+
+                </RelativeLayout>
+
+            </com.daimajia.swipe.SwipeLayout>
+
+    </RelativeLayout>
+</ScrollView>

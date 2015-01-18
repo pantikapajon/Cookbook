@@ -29,6 +29,8 @@ import org.androidannotations.annotations.ViewById;
 public class BrowseActivity extends Activity {
 
     public static final int REQUESTCODE = 42;
+    public static final int LOGIN_REQUESTCODE = 40;
+    public static final int PROFILE_REQUESTCODE = 38;
     public static final String USER = "user";
     public static final String RECIPE = "recipe";
     @ViewById
@@ -54,7 +56,7 @@ public class BrowseActivity extends Activity {
         ringProgressDialog.setMessage("Downloading recipes...");
         ringProgressDialog.setIndeterminate(true);
         ringProgressDialog.show();
-        restBackgroundTask.getRecipeList();
+        restBackgroundTask.getRecipeList(user);
     }
 
     public void showError(Exception e) {
@@ -77,6 +79,12 @@ public class BrowseActivity extends Activity {
         ViewRecipeActivity_.intent(this).bundle(bundle).start();
     }
 
+    @OptionsItem(R.id.action_login)
+    void actionLoginSelected(){
+        if(user == null) LoginActivity_.intent(this).startForResult(LOGIN_REQUESTCODE);
+        else Toast.makeText(this, getString(R.string.user_already_logged_in), Toast.LENGTH_LONG).show();
+    }
+
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
         //User must be logged in to start Activity
@@ -87,22 +95,26 @@ public class BrowseActivity extends Activity {
 
     @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
-        Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(USER, user);
-        startActivity(intent);
+        if(user == null) LoginActivity_.intent(this).startForResult(PROFILE_REQUESTCODE);
+        else ProfileActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                AddRecipeActivity_.intent(this).user(user).start();
+        if(resultCode == RESULT_OK){
+            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            switch (requestCode) {
+                case REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
+                                    break;
+                case LOGIN_REQUESTCODE:     init();
+                                            break;
+                case PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
+                                            break;
+                default:            break;
             }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
-            }
+        }
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
         }
     }
 }

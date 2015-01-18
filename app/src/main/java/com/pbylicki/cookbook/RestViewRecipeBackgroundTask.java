@@ -6,6 +6,7 @@ import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.LikeList;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.User;
+import com.pbylicki.cookbook.data.UserInfo;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
@@ -23,12 +24,21 @@ public class RestViewRecipeBackgroundTask {
     @RestService
     CookbookRestClient restClient;
     @Background
-    void getComments(Recipe recipe) {
+    void getComments(Recipe recipe, User user) {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
+            UserInfo authorInfo = null;
             CommentList commentList = restClient.getCommentListForRecipe("recipeId=" + Integer.toString(recipe.id));
             LikeList likeList = restClient.getLikeListForRecipe("recipeId=" + Integer.toString(recipe.id));
-            publishResult(commentList, likeList.getLikesForRecipe());
+            if(user != null){
+                restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
+                for(Comment comment : commentList.records){
+                    UserInfo userInfo = restClient.getUserInfo(comment.ownerId);
+                    comment.author = userInfo.display_name;
+                }
+                authorInfo = restClient.getUserInfo(recipe.ownerId);
+            }
+            publishResult(commentList, likeList.getLikesForRecipe(), authorInfo);
         } catch (Exception e) {
             publishError(e);
         }
@@ -81,9 +91,10 @@ public class RestViewRecipeBackgroundTask {
         }
     }
     @UiThread
-    void publishResult(CommentList commentList, HashSet<Integer> likeHash) {
+    void publishResult(CommentList commentList, HashSet<Integer> likeHash, UserInfo authorInfo) {
         activity.updateCommentList(commentList);
         activity.setLikeHash(likeHash);
+        if(authorInfo != null) activity.setRecipeAuthor(authorInfo);
     }
     @UiThread
     void publishError(Exception e) {

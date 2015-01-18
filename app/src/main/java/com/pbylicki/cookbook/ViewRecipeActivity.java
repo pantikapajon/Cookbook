@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
+import com.pbylicki.cookbook.data.UserInfo;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -48,6 +50,8 @@ public class ViewRecipeActivity extends Activity {
     ImageView image;
     @ViewById
     TextView created;
+    @ViewById
+    TextView author;
     @ViewById
     TextView introduction;
     @ViewById
@@ -81,24 +85,27 @@ public class ViewRecipeActivity extends Activity {
     @AfterViews
     void init(){
         //Gets User and Selected Recipe
-        user = (User)bundle.getSerializable(BrowseActivity.USER);
+        if(user == null) user = (User)bundle.getSerializable(BrowseActivity.USER);
         recipe = (Recipe) bundle.getSerializable(BrowseActivity.RECIPE);
         //Populates View
+        if(recipe.pictureBytes != null) recipe.decodeAndSetImage(image);
         title.setText(recipe.title);
         created.setText(getString(R.string.add_recipe_created_date)+recipe.getCreatedDate().toString());
         introduction.setText(recipe.introduction);
-        servings.setText(getString(R.string.add_recipe_servings)+": " +Integer.toString(recipe.servings));
+        if(recipe.servings != null) servings.setText(getString(R.string.add_recipe_servings)+": " +Integer.toString(recipe.servings));
         if(recipe.preparationMinutes != null) preparationMinutes.setText(getString(R.string.add_recipe_preparationMinutes)+": " +Integer.toString(recipe.preparationMinutes));
         if(recipe.cookingMinutes != null) cookingMinutes.setText(getString(R.string.add_recipe_cookingMinutes)+": " +Integer.toString(recipe.cookingMinutes));
         ingredients.setText(recipe.ingredients);
         steps.setText(recipe.steps);
+        if(recipe.author != null) author.setText(getString(R.string.view_recipe_author)+ " " + recipe.author);
+        else author.setText(getString(R.string.view_recipe_author)+" User " + Integer.toString(recipe.ownerId));
 
         commentlist.setAdapter(adapter);
         ringProgressDialog = new ProgressDialog(this);
         ringProgressDialog.setMessage("Downloading data...");
         ringProgressDialog.setIndeterminate(true);
         ringProgressDialog.show();
-        restBackgroundTask.getComments(recipe);
+        restBackgroundTask.getComments(recipe, user);
     }
 
     public void showError(Exception e) {
@@ -110,10 +117,14 @@ public class ViewRecipeActivity extends Activity {
     public void updateCommentList(CommentList commentList) {
         ringProgressDialog.dismiss();
         adapter.update(commentList);
+        ViewGroup.LayoutParams params = this.commentlist.getLayoutParams();
+        int dim = (int)getResources().getDimension(R.dimen.comment_list_item_height);
+        params.height = adapter.getCount() * dim;
+        this.commentlist.setLayoutParams(params);
     }
     public void updateCommentListAfterPost() {
         newcomment.setText("");
-        restBackgroundTask.getComments(recipe);
+        restBackgroundTask.getComments(recipe, user);
     }
     public void deleteRecipeSuccess(){
         ringProgressDialog.dismiss();
@@ -123,6 +134,10 @@ public class ViewRecipeActivity extends Activity {
     public void setLikeHash(HashSet<Integer> likeHash){
         this.likeHash = likeHash;
         if (user != null) switchLikeButton(likeHash.contains(user.id));
+    }
+    public void setRecipeAuthor(UserInfo userInfo){
+        recipe.author = userInfo.display_name;
+        author.setText(getString(R.string.view_recipe_author)+recipe.author);
     }
     public void postLikeSuccess(){
         likeHash.add(user.id);
@@ -194,6 +209,11 @@ public class ViewRecipeActivity extends Activity {
         }
 
     }
+    @OptionsItem(R.id.action_login)
+    void actionLoginSelected(){
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.LOGIN_REQUESTCODE);
+        else Toast.makeText(this, getString(R.string.user_already_logged_in), Toast.LENGTH_LONG).show();
+    }
 
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
@@ -205,10 +225,8 @@ public class ViewRecipeActivity extends Activity {
 
     @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
-        Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(BrowseActivity_.USER, user);
-        startActivity(intent);
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
+        else ProfileActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -219,6 +237,10 @@ public class ViewRecipeActivity extends Activity {
             switch (requestCode) {
                 case BrowseActivity_.REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
                                                     break;
+                case BrowseActivity_.LOGIN_REQUESTCODE: init();
+                                                        break;
+                case BrowseActivity_.PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
+                                                            break;
                 case COMMENT_REQUESTCODE:   ringProgressDialog.show();
                                             restBackgroundTask.postComment(user, getNewComment());
                                             break;
@@ -228,6 +250,7 @@ public class ViewRecipeActivity extends Activity {
                                                 break;
                 case LIKE_RECIPE_REQUESTCODE:   likebuttonClicked();
                                                 break;
+                default:                        break;
             }
         }
         if (resultCode == RESULT_CANCELED) {

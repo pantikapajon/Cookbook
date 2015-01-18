@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="view_profile_swipe_height">128dp</dimen>
+    <dimen name="recipe_list_item_height">74dp</dimen>
+    <dimen name="comment_list_item_height">64dp</dimen>
 </resources>

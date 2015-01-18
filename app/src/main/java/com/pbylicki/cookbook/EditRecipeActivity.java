@@ -58,14 +58,14 @@ public class EditRecipeActivity extends Activity {
     @AfterViews
     void init() {
         //Gets User and Selected Recipe
-        user = (User)bundle.getSerializable(BrowseActivity.USER);
+        if(user == null) user = (User)bundle.getSerializable(BrowseActivity.USER);
         recipe = (Recipe) bundle.getSerializable(BrowseActivity.RECIPE);
         recipeId = recipe.id;
         //Populates View
         header.setText(getString(R.string.edit_recipe_header));
         title.setText(recipe.title);
         introduction.setText(recipe.introduction);
-        servings.setText(Integer.toString(recipe.servings));
+        if(recipe.servings != null) servings.setText(Integer.toString(recipe.servings));
         if(recipe.preparationMinutes != null) preparationMinutes.setText(Integer.toString(recipe.preparationMinutes));
         if(recipe.cookingMinutes != null) cookingMinutes.setText(Integer.toString(recipe.cookingMinutes));
         ingredients.setText(recipe.ingredients);
@@ -113,6 +113,12 @@ public class EditRecipeActivity extends Activity {
         BrowseActivity_.intent(this).user(user).start();
     }
 
+    @OptionsItem(R.id.action_login)
+    void actionLoginSelected(){
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.LOGIN_REQUESTCODE);
+        else Toast.makeText(this, getString(R.string.user_already_logged_in), Toast.LENGTH_LONG).show();
+    }
+
     @OptionsItem(R.id.action_add)
     void actionAddSelected() {
 
@@ -128,7 +134,7 @@ public class EditRecipeActivity extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUESTCODE) {
+        /*if (requestCode == REQUESTCODE) {
             if(resultCode == RESULT_OK){
                 user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
                 AddRecipeActivity_.intent(this).user(user).start();
@@ -136,6 +142,19 @@ public class EditRecipeActivity extends Activity {
             if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
             }
+        }*/
+        if(resultCode == RESULT_OK){
+            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            switch (requestCode) {
+                case REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
+                                    break;
+                case BrowseActivity_.LOGIN_REQUESTCODE: init();
+                                                        break;
+                default:            break;
+            }
+        }
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -1,7 +1,10 @@
 package com.pbylicki.cookbook;
 
-import com.pbylicki.cookbook.data.PhoneBook;
+import com.pbylicki.cookbook.data.PictureList;
+import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
+import com.pbylicki.cookbook.data.User;
+import com.pbylicki.cookbook.data.UserInfo;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
@@ -17,10 +20,21 @@ public class RestBrowseBackgroundTask {
     @RestService
     CookbookRestClient restClient;
     @Background
-    void getRecipeList() {
+    void getRecipeList(User user) {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             RecipeList recipeList = restClient.getRecipeList();
+            for(Recipe recipe : recipeList.records){
+                PictureList pictureList = restClient.getPictureListForRecipe("recipeId=" + Integer.toString(recipe.id));
+                if(pictureList.records.size()>0) recipe.pictureBytes = pictureList.records.get(0).base64bytes;
+            }
+            if(user != null){
+                restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
+                for(Recipe recipe : recipeList.records){
+                    UserInfo userInfo = restClient.getUserInfo(recipe.ownerId);
+                    recipe.author = userInfo.display_name;
+                }
+            }
             publishResult(recipeList);
         } catch (Exception e) {
             publishError(e);
