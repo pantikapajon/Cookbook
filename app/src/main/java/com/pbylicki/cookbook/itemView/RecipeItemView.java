@@ -30,9 +30,10 @@ public class RecipeItemView extends RelativeLayout {
     public void bind(Recipe recipe) {
         title.setText(recipe.title);
         introduction.setText(recipe.introduction);
-        date.setText(recipe.getCreatedDate().toString());
+        date.setText(recipe.getShortDate(recipe.getCreatedDate()));
 
         if(recipe.pictureBytes != null) recipe.decodeAndSetImage(image);
+        else image.setImageResource(R.drawable.meal);
         if(recipe.ownerId != null) {
             if (recipe.author != null) author.setText("by " + recipe.author);
             else author.setText("by User " + Integer.toString(recipe.ownerId));

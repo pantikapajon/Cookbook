@@ -32,7 +32,7 @@ public interface CookbookRestClient extends RestClientHeaders {
     RecipeList getRecipeListForIds(String path);
     @Post("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
-    void addRecipeEntry(Recipe recipe);
+    Recipe addRecipeEntry(Recipe recipe);
     @Put("/db/recipes")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     void editRecipeEntry(Recipe recipe);
@@ -78,6 +78,12 @@ public interface CookbookRestClient extends RestClientHeaders {
     Picture getPictureById(int id);
     @Get("/db/pictures?filter={path}")
     PictureList getPictureListForRecipe(String path);
+    @Post("/db/pictures")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void addPictureEntry(Picture picture);
+    @Delete("/db/pictures?filter={path}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    void deletePictureEntryForRecipe(String path);
 
     @Get("/system/user/{id}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })

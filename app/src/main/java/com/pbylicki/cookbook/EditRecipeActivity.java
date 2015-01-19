@@ -3,8 +3,12 @@ package com.pbylicki.cookbook;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,8 @@ import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.ByteArrayOutputStream;
 
 @EActivity(R.layout.activity_add_recipe)
 @OptionsMenu(R.menu.menu_browse)
@@ -43,12 +49,15 @@ public class EditRecipeActivity extends Activity {
     EditText ingredients;
     @ViewById
     EditText steps;
+    @ViewById
+    ImageView image;
 
     @Extra
     Bundle bundle;
     Recipe recipe;
     User user;
     int recipeId;
+    String oldPictureBytes;
 
     @Bean
     @NonConfigurationInstance
@@ -70,6 +79,8 @@ public class EditRecipeActivity extends Activity {
         if(recipe.cookingMinutes != null) cookingMinutes.setText(Integer.toString(recipe.cookingMinutes));
         ingredients.setText(recipe.ingredients);
         steps.setText(recipe.steps);
+        if(recipe.pictureBytes != null) recipe.decodeAndSetImage(image);
+        oldPictureBytes = recipe.pictureBytes;
 
         ringProgressDialog = new ProgressDialog(this);
         ringProgressDialog.setMessage("Saving recipe...");
@@ -87,18 +98,26 @@ public class EditRecipeActivity extends Activity {
 
         //passes edited object to Rest client
         ringProgressDialog.show();
-        recipe = new Recipe();
+        //recipe = new Recipe();
         recipe.id = recipeId;
         recipe.title = title.getText().toString();
         recipe.introduction = introduction.getText().toString();
         recipe.servings = Integer.parseInt(servings.getText().toString());
         if(!isEmpty(preparationMinutes)) recipe.preparationMinutes = Integer.parseInt(preparationMinutes.getText().toString());
+        else recipe.preparationMinutes = null;
         if(!isEmpty(cookingMinutes)) recipe.cookingMinutes = Integer.parseInt(cookingMinutes.getText().toString());
+        else recipe.cookingMinutes = null;
         recipe.ingredients = ingredients.getText().toString();
         recipe.steps = steps.getText().toString();
         recipe.ownerId = user.id;
-        restBackgroundTask.editRecipe(user, recipe);
+        restBackgroundTask.editRecipe(user, recipe, oldPictureBytes);
 
+    }
+
+    @Click
+    void imagebuttonClicked(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, AddRecipeActivity_.CAPTURE_IMAGE_THUMBNAIL_ACTIVITY_REQUEST_CODE);
     }
 
     public void editError(Exception e) {
@@ -136,7 +155,7 @@ public class EditRecipeActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(resultCode == RESULT_OK){
-            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            if (user == null) user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
             switch (requestCode) {
                 case REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
                                     break;
@@ -144,6 +163,8 @@ public class EditRecipeActivity extends Activity {
                                                         break;
                 case BrowseActivity_.PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
                                                             break;
+                case AddRecipeActivity_.CAPTURE_IMAGE_THUMBNAIL_ACTIVITY_REQUEST_CODE:  getAndEncodeImage(data);
+                                                                                        break;
                 default:            break;
             }
         }
@@ -157,5 +178,16 @@ public class EditRecipeActivity extends Activity {
     }
     private void showToastRequired(EditText editText){
         Toast.makeText(this, getString(R.string.add_recipe_toast_required) + editText.getHint(), Toast.LENGTH_LONG).show();
+    }
+    private void getAndEncodeImage(Intent data){
+        if(data == null) return;
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        recipe.pictureBytes = Base64.encodeToString(b, Base64.DEFAULT);
+        image.setImageDrawable(null);
+        recipe.decodeAndSetImage(image);
+        image.setAlpha(255);
     }
 }

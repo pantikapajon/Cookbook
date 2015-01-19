@@ -1,5 +1,6 @@
 package com.pbylicki.cookbook;
 
+import com.pbylicki.cookbook.data.Picture;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
@@ -22,7 +23,16 @@ public class RestAddRecipeBackgroundTask {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
-            restClient.addRecipeEntry(recipe);
+
+            Recipe response = restClient.addRecipeEntry(recipe);
+
+            if(recipe.pictureBytes != null){
+                Picture picture = new Picture();
+                picture.base64bytes = recipe.pictureBytes;
+                picture.recipeId = response.id;
+                picture.ownerId = user.id;
+                restClient.addPictureEntry(picture);
+            }
             publishResult();
         } catch (Exception e) {
             publishError(e);

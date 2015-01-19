@@ -31,5 +31,10 @@ public class Comment implements Comparable<Comment> {
         //from newest to oldest
         return -getCreatedDate().compareTo(comment.getCreatedDate());
     }
+
+    public String getShortDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm dd MMM yyyy");
+        return sdf.format(date);
+    }
 }
 

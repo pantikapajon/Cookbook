@@ -27,6 +27,6 @@ public class CommentItemView extends RelativeLayout {
         if(comment.author != null) author.setText(comment.author);
         else author.setText("User " + Integer.toString(comment.ownerId));
         text.setText(comment.text);
-        date.setText(comment.getCreatedDate().toString());
+        date.setText(comment.getShortDate(comment.getCreatedDate()));
     }
 }

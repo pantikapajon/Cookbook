@@ -1,5 +1,6 @@
 package com.pbylicki.cookbook;
 
+import com.pbylicki.cookbook.data.Picture;
 import com.pbylicki.cookbook.data.PictureList;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
@@ -11,6 +12,8 @@ import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.rest.RestService;
+
+import java.util.Hashtable;
 
 
 @EBean
@@ -24,9 +27,11 @@ public class RestBrowseBackgroundTask {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             RecipeList recipeList = restClient.getRecipeList();
+            PictureList pictureList = restClient.getPictureListForRecipe("recipeId>0");
+            Hashtable<String, Picture> pictureHashtable = new Hashtable<String, Picture>();
+            for(Picture picture : pictureList.records) pictureHashtable.put(Integer.toString(picture.recipeId), picture);
             for(Recipe recipe : recipeList.records){
-                PictureList pictureList = restClient.getPictureListForRecipe("recipeId=" + Integer.toString(recipe.id));
-                if(pictureList.records.size()>0) recipe.pictureBytes = pictureList.records.get(0).base64bytes;
+                if(pictureHashtable.containsKey(Integer.toString(recipe.id))) recipe.pictureBytes = pictureHashtable.get(Integer.toString(recipe.id)).base64bytes;
             }
             if(user != null){
                 restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);

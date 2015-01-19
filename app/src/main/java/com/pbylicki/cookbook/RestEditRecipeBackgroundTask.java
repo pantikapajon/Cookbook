@@ -1,5 +1,6 @@
 package com.pbylicki.cookbook;
 
+import com.pbylicki.cookbook.data.Picture;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.User;
 
@@ -17,11 +18,19 @@ public class RestEditRecipeBackgroundTask {
     @RestService
     CookbookRestClient restClient;
     @Background
-    void editRecipe(User user, Recipe recipe) {
+    void editRecipe(User user, Recipe recipe, String oldPictureBytes) {
         try {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
             restClient.editRecipeEntry(recipe);
+            if(oldPictureBytes != recipe.pictureBytes){
+                restClient.deletePictureEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
+                Picture picture = new Picture();
+                picture.base64bytes = recipe.pictureBytes;
+                picture.recipeId = recipe.id;
+                picture.ownerId = user.id;
+                restClient.addPictureEntry(picture);
+            }
             publishResult();
         } catch (Exception e) {
             publishError(e);

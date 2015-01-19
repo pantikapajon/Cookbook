@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.pbylicki.cookbook.data.Like;
 import com.pbylicki.cookbook.data.LikeList;
+import com.pbylicki.cookbook.data.Picture;
 import com.pbylicki.cookbook.data.PictureList;
 import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
@@ -17,6 +18,7 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.rest.RestService;
 
 import java.util.HashSet;
+import java.util.Hashtable;
 
 
 @EBean
@@ -32,9 +34,12 @@ public class RestProfileBackgroundTask {
             restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
             UserInfo userInfo = restClient.getUserInfo(user.id);
             RecipeList recipeList = restClient.getRecipeListForOwner("ownerId=" + Integer.toString(user.id));
+
+            PictureList pictureList = restClient.getPictureListForRecipe("recipeId>0");
+            Hashtable<Integer, Picture> pictureHashtable = new Hashtable<Integer, Picture>();
+            for(Picture picture : pictureList.records) pictureHashtable.put(picture.recipeId, picture);
             for(Recipe recipe : recipeList.records){
-                PictureList pictureList = restClient.getPictureListForRecipe("recipeId=" + Integer.toString(recipe.id));
-                if(pictureList.records.size()>0) recipe.pictureBytes = pictureList.records.get(0).base64bytes;
+                if(pictureHashtable.containsKey(recipe.id)) recipe.pictureBytes = pictureHashtable.get(recipe.id).base64bytes;
                 recipe.author = userInfo.display_name;
             }
             publishResult(recipeList, userInfo);
@@ -53,17 +58,16 @@ public class RestProfileBackgroundTask {
             for(Like like : likeList.records) uniqueLikes.add(like.recipeId);
             String ids = TextUtils.join(",", uniqueLikes);
             RecipeList recipeList = restClient.getRecipeListForIds(ids);
-            UserInfo userInfo; PictureList pictureList;
+            UserInfo userInfo;
+
+            PictureList pictureList = restClient.getPictureListForRecipe("recipeId>0");
+            Hashtable<Integer, Picture> pictureHashtable = new Hashtable<Integer, Picture>();
+            for(Picture picture : pictureList.records) pictureHashtable.put(picture.recipeId, picture);
             for(Recipe recipe : recipeList.records){
-                pictureList = restClient.getPictureListForRecipe("recipeId=" + Integer.toString(recipe.id));
-                if(pictureList.records.size()>0) recipe.pictureBytes = pictureList.records.get(0).base64bytes;
+                if(pictureHashtable.containsKey(recipe.id)) recipe.pictureBytes = pictureHashtable.get(recipe.id).base64bytes;
                 userInfo = restClient.getUserInfo(recipe.ownerId);
                 recipe.author = userInfo.display_name;
             }
-            /*for(Recipe recipe : recipeList.records){
-                userInfo = restClient.getUserInfo(recipe.ownerId);
-                recipe.author = userInfo.display_name;
-            }*/
             publishLikeResult(recipeList);
         } catch (Exception e) {
             publishError(e);

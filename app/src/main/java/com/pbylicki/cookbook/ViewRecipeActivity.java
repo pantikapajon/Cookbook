@@ -89,7 +89,7 @@ public class ViewRecipeActivity extends Activity {
         //Populates View
         if(recipe.pictureBytes != null) recipe.decodeAndSetImage(image);
         title.setText(recipe.title);
-        created.setText(getString(R.string.add_recipe_created_date)+recipe.getCreatedDate().toString());
+        created.setText(getString(R.string.add_recipe_created_date)+recipe.getShortDate(recipe.getCreatedDate()).toString());
         introduction.setText(recipe.introduction);
         if(recipe.servings != null) servings.setText(getString(R.string.add_recipe_servings)+": " +Integer.toString(recipe.servings));
         if(recipe.preparationMinutes != null) preparationMinutes.setText(getString(R.string.add_recipe_preparationMinutes)+": " +Integer.toString(recipe.preparationMinutes));

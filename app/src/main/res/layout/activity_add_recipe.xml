@@ -110,11 +110,35 @@
         android:hint="@string/add_recipe_stepslabel"
         />
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/steps"
+        android:layout_margin="20dp"
+        android:background="@drawable/ic_action_picture"/>
+
+    <Button
+        android:id="@+id/imagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/steps"
+        android:layout_toRightOf="@+id/image"
+        android:text="@string/add_recipe_image_button"
+        android:textColor="@color/white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+
+        android:layout_centerHorizontal="true"
+        android:background="@color/orangebasic"/>
+
     <Button
         android:id="@+id/addbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/steps"
+        android:layout_below="@+id/image"
         android:text="@string/add_recipe_addbutton"
         android:textColor="@color/white"
         android:layout_margin="10dp"

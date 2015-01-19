@@ -62,6 +62,7 @@ public class RestViewRecipeBackgroundTask {
             //delete likes and picture
             restClient.deleteLikeEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
             restClient.deleteCommentEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
+            if(recipe.pictureBytes != null) restClient.deletePictureEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
             restClient.deleteRecipeEntry(recipe.id);
             publishResultDelete();
         } catch (Exception e) {

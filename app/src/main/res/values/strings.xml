@@ -28,6 +28,7 @@
     <string name="add_recipe_addbutton">Confirm</string>
     <string name="add_recipe_toast_added">Recipe added</string>
     <string name="add_recipe_toast_required">The following field is required: </string>
+    <string name="add_recipe_image_button">Add</string>
     <string name="view_recipe_author">by:\u0020\u0020</string>
     <string name="view_recipe_commentlabel">Comments</string>
     <string name="view_recipe_comment_field">New Comment</string>

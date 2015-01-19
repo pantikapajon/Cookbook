@@ -3,7 +3,11 @@ package com.pbylicki.cookbook;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.pbylicki.cookbook.data.Recipe;
@@ -19,11 +23,14 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.ByteArrayOutputStream;
+
 @EActivity(R.layout.activity_add_recipe)
 @OptionsMenu(R.menu.menu_browse)
 public class AddRecipeActivity extends Activity {
 
     public static final int REQUESTCODE = 42;
+    public static final int CAPTURE_IMAGE_THUMBNAIL_ACTIVITY_REQUEST_CODE = 1939;
 
     @ViewById
     EditText title;
@@ -39,9 +46,13 @@ public class AddRecipeActivity extends Activity {
     EditText ingredients;
     @ViewById
     EditText steps;
+    @ViewById
+    ImageView image;
 
     @Extra
     User user;
+
+    Recipe recipe;
 
     @Bean
     @NonConfigurationInstance
@@ -50,10 +61,10 @@ public class AddRecipeActivity extends Activity {
 
     @AfterViews
     void init() {
+        recipe = new Recipe();
         ringProgressDialog = new ProgressDialog(this);
         ringProgressDialog.setMessage("Adding recipe...");
         ringProgressDialog.setIndeterminate(true);
-
     }
 
     @Click
@@ -63,10 +74,9 @@ public class AddRecipeActivity extends Activity {
         if(isEmpty(servings)) { showToastRequired(servings); return; }
         if(isEmpty(ingredients)) { showToastRequired(ingredients); return; }
         if(isEmpty(steps)) { showToastRequired(steps); return; }
-
         //Creates new Recipe object and passes it to Rest client
         ringProgressDialog.show();
-        Recipe recipe = new Recipe();
+        //Recipe recipe = new Recipe();
         recipe.title = title.getText().toString();
         recipe.introduction = introduction.getText().toString();
         recipe.servings = Integer.parseInt(servings.getText().toString());
@@ -78,6 +88,13 @@ public class AddRecipeActivity extends Activity {
         restBackgroundTask.addRecipe(user, recipe);
 
     }
+
+    @Click
+    void imagebuttonClicked(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAPTURE_IMAGE_THUMBNAIL_ACTIVITY_REQUEST_CODE);
+    }
+
 
     public void addError(Exception e) {
         ringProgressDialog.dismiss();
@@ -112,7 +129,7 @@ public class AddRecipeActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(resultCode == RESULT_OK){
-            user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
+            if (user == null) user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
             switch (requestCode) {
                 case REQUESTCODE:   AddRecipeActivity_.intent(this).user(user).start();
                     break;
@@ -120,22 +137,14 @@ public class AddRecipeActivity extends Activity {
                     break;
                 case BrowseActivity_.PROFILE_REQUESTCODE:   ProfileActivity_.intent(this).user(user).start();
                     break;
+                case CAPTURE_IMAGE_THUMBNAIL_ACTIVITY_REQUEST_CODE: getAndEncodeImage(data);
+                                                                    break;
                 default:            break;
             }
         }
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
         }
-
-        /*if (requestCode == REQUESTCODE) {
-            if(resultCode == RESULT_OK){
-                user =(User)data.getSerializableExtra(LoginActivity.LOGINRESULT);
-                AddRecipeActivity_.intent(this).user(user).start();
-            }
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
-            }
-        }*/
     }
 
     private boolean isEmpty(EditText editText) {
@@ -143,5 +152,16 @@ public class AddRecipeActivity extends Activity {
     }
     private void showToastRequired(EditText editText){
         Toast.makeText(this, getString(R.string.add_recipe_toast_required) + editText.getHint(), Toast.LENGTH_LONG).show();
+    }
+    private void getAndEncodeImage(Intent data){
+        if(data == null) return;
+        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        recipe.pictureBytes = Base64.encodeToString(b, Base64.DEFAULT);
+        image.setImageDrawable(null);
+        recipe.decodeAndSetImage(image);
+        image.setAlpha(255);
     }
 }

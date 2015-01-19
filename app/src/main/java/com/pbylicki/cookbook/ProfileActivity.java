@@ -60,9 +60,6 @@ public class ProfileActivity extends Activity {
     @Extra
     User user;
 
-    @OptionsMenuItem(R.id.action_search)
-    MenuItem menuSearch;
-
     @Bean
     RecipeListAdapter likeadapter;
     @Bean
@@ -102,7 +99,7 @@ public class ProfileActivity extends Activity {
         if(recipeadapter.getCount() == 0) recipeempty.setVisibility(View.VISIBLE);
         ViewGroup.LayoutParams params = this.recipelist.getLayoutParams();
         int dim = (int)getResources().getDimension(R.dimen.recipe_list_item_height);
-        params.height = Math.max(recipeadapter.getCount() * dim, dim);
+        params.height = recipeadapter.getCount() * (dim+2);
         this.recipelist.setLayoutParams(params);
     }
     public void updateLikeList(RecipeList recipeList) {
@@ -112,33 +109,20 @@ public class ProfileActivity extends Activity {
         if(likeadapter.getCount() == 0) likeempty.setVisibility(View.VISIBLE);
         ViewGroup.LayoutParams params = this.likelist.getLayoutParams();
         int dim = (int)getResources().getDimension(R.dimen.recipe_list_item_height);
-        params.height = likeadapter.getCount() * dim;
+        params.height = likeadapter.getCount() * (dim+2);
         this.likelist.setLayoutParams(params);
     }
     public void updateUserInfo(UserInfo userInfo){
         this.userInfo = userInfo;
         username.setText(userInfo.display_name);
         email.setText(getString(R.string.profile_email) + userInfo.email);
-        created.setText(getString(R.string.profile_created) + userInfo.created_date);
-        last_modified.setText(getString(R.string.profile_last_modified) + userInfo.last_modified_date);
+        created.setText(getString(R.string.profile_created) + userInfo.getShortDate(userInfo.getDate(userInfo.created_date)));
+        last_modified.setText(getString(R.string.profile_last_modified) + userInfo.getShortDate(userInfo.getDate(userInfo.last_modified_date)));
     }
-/*    @Click
-    void moveClicked(){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(USER, user);
-        bundle.putSerializable(USERINFO, userInfo);
-        bundle.putSerializable(RECIPELIST, recipeList);
-        bundle.putSerializable(LIKELIST, likeList);
-        Intent i = new Intent(this, MyActivity.class);
-        i.putExtras(bundle);
-        startActivity(i);
-    }*/
-
 
     @ItemClick
     void recipelistItemClicked(Recipe item){
         if(item.id == null) return;
-        //Toast.makeText(this, Integer.toString(item.id)+Integer.toString(item.ownerId) , Toast.LENGTH_LONG).show();
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         bundle.putSerializable(RECIPE, item);
@@ -166,14 +150,11 @@ public class ProfileActivity extends Activity {
         else AddRecipeActivity_.intent(this).user(user).start();
 
     }
-
-/*    @OptionsItem(R.id.action_profile)
+    @OptionsItem(R.id.action_profile)
     void actionProfileSelected() {
-        Toast.makeText(this, "View Profile", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(USER, user);
-        startActivity(intent);
-    }*/
+        if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
+        else ProfileActivity_.intent(this).user(user).start();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
