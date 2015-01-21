@@ -17,6 +17,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
@@ -33,10 +34,12 @@ public class BrowseActivity extends Activity {
     public static final int PROFILE_REQUESTCODE = 38;
     public static final String USER = "user";
     public static final String RECIPE = "recipe";
+
     @ViewById
     ListView list;
 
     @Extra
+    @InstanceState
     User user;
 
     @OptionsMenuItem(R.id.action_search)

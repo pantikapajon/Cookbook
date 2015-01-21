@@ -56,13 +56,19 @@ public class RestViewRecipeBackgroundTask {
     }
     @Background
     void deleteRecipe(User user, Recipe recipe) {
+        restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
+        restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
         try {
-            restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
-            restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
-            //delete likes and picture
+            //delete likes, comments and picture
             restClient.deleteLikeEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
             restClient.deleteCommentEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
             if(recipe.pictureBytes != null) restClient.deletePictureEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
+        } catch (Exception e) {
+            publishError(e);
+            return;
+        }
+        try{
+            //delete recipe
             restClient.deleteRecipeEntry(recipe.id);
             publishResultDelete();
         } catch (Exception e) {

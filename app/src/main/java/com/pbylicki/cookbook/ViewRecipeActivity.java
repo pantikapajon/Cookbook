@@ -25,6 +25,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
@@ -76,6 +77,7 @@ public class ViewRecipeActivity extends Activity {
     @NonConfigurationInstance
     RestViewRecipeBackgroundTask restBackgroundTask;
     Recipe recipe;
+    @InstanceState
     User user;
     //Stores unique likes' ownerIds for recipe
     HashSet<Integer> likeHash;

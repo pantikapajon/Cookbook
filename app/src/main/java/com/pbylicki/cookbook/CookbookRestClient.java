@@ -11,6 +11,7 @@ import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 import com.pbylicki.cookbook.data.UserInfo;
+import com.pbylicki.cookbook.data.UserInfoList;
 
 import org.androidannotations.annotations.rest.Delete;
 import org.androidannotations.annotations.rest.Get;
@@ -88,6 +89,9 @@ public interface CookbookRestClient extends RestClientHeaders {
     @Get("/system/user/{id}")
     @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
     UserInfo getUserInfo(Integer id);
+    @Get("/system/user?ids={path}")
+    @RequiresHeader({"X-Dreamfactory-Session-Token","X-Dreamfactory-Application-Name" })
+    UserInfoList getUserInfoForIds(String path);
 
     @Post("/user/session")
     User login(EmailAndPassword emailAndPassword);

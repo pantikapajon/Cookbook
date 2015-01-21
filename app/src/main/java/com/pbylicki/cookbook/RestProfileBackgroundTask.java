@@ -10,6 +10,7 @@ import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 import com.pbylicki.cookbook.data.UserInfo;
+import com.pbylicki.cookbook.data.UserInfoList;
 
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EBean;
@@ -58,15 +59,21 @@ public class RestProfileBackgroundTask {
             for(Like like : likeList.records) uniqueLikes.add(like.recipeId);
             String ids = TextUtils.join(",", uniqueLikes);
             RecipeList recipeList = restClient.getRecipeListForIds(ids);
-            UserInfo userInfo;
+            //UserInfo userInfo;
+
+            HashSet<Integer> uniqueUsers = new HashSet<Integer>();
+            for(Recipe recipe : recipeList.records) uniqueUsers.add(recipe.ownerId);
+            ids = TextUtils.join(",", uniqueUsers);
+            UserInfoList userInfoList = restClient.getUserInfoForIds(ids);
+            Hashtable<Integer, UserInfo> userInfoHashtable = new Hashtable<Integer, UserInfo>();
+            for(UserInfo userInfo : userInfoList.records) userInfoHashtable.put(userInfo.id, userInfo);
 
             PictureList pictureList = restClient.getPictureListForRecipe("recipeId>0");
             Hashtable<Integer, Picture> pictureHashtable = new Hashtable<Integer, Picture>();
             for(Picture picture : pictureList.records) pictureHashtable.put(picture.recipeId, picture);
             for(Recipe recipe : recipeList.records){
                 if(pictureHashtable.containsKey(recipe.id)) recipe.pictureBytes = pictureHashtable.get(recipe.id).base64bytes;
-                userInfo = restClient.getUserInfo(recipe.ownerId);
-                recipe.author = userInfo.display_name;
+                if(userInfoHashtable.containsKey(recipe.ownerId)) recipe.author = userInfoHashtable.get(recipe.ownerId).display_name;
             }
             publishLikeResult(recipeList);
         } catch (Exception e) {
