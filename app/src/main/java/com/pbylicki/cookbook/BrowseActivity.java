@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pbylicki.cookbook.adapter.RecipeListAdapter;
@@ -13,6 +15,7 @@ import com.pbylicki.cookbook.data.Recipe;
 import com.pbylicki.cookbook.data.RecipeList;
 import com.pbylicki.cookbook.data.User;
 
+import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
@@ -22,8 +25,10 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 @EActivity(R.layout.activity_browse)
 @OptionsMenu(R.menu.menu_browse)
@@ -34,16 +39,23 @@ public class BrowseActivity extends Activity {
     public static final int PROFILE_REQUESTCODE = 38;
     public static final String USER = "user";
     public static final String RECIPE = "recipe";
+    public static final int FILTER_THRESHOLD = 3;
 
     @ViewById
     ListView list;
+    @ViewById
+    AutoCompleteTextView filter;
+    @ViewById
+    TextView header;
 
     @Extra
     @InstanceState
     User user;
 
-    @OptionsMenuItem(R.id.action_search)
-    MenuItem menuSearch;
+    RecipeList recipeList;
+    RecipeList resultList;
+    ArrayList<String> titles;
+    ArrayAdapter<String> titlesAdapter;
 
     @Bean
     RecipeListAdapter adapter;
@@ -60,6 +72,8 @@ public class BrowseActivity extends Activity {
         ringProgressDialog.setIndeterminate(true);
         ringProgressDialog.show();
         restBackgroundTask.getRecipeList(user);
+
+
     }
 
     public void showError(Exception e) {
@@ -70,7 +84,32 @@ public class BrowseActivity extends Activity {
 
     public void updateRecipeList(RecipeList recipeList) {
         ringProgressDialog.dismiss();
+        this.recipeList = recipeList;
         adapter.update(recipeList);
+        //Creates list of titles for autocompletetextview
+        HashSet<String> titleHashset = new HashSet<String>();
+        //for(Recipe recipe : recipeList.records){ if(recipe.title != null) titles.add(recipe.title);}
+        for(Recipe recipe : recipeList.records){ if(recipe.title != null) titleHashset.add(recipe.title.toLowerCase().trim());}
+        titles = new ArrayList<String>(titleHashset);
+        titlesAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, titles);
+        filter.setAdapter(titlesAdapter);
+        updateRecipeCount();
+    }
+
+    @AfterTextChange(R.id.filter)
+    void afterTextChangedOnFilter(){
+        String currentFilter = filter.getText().toString();
+        if(currentFilter.length()>=FILTER_THRESHOLD){
+            resultList = new RecipeList();
+            for(Recipe recipe : recipeList.records){
+                String title = recipe.title.toLowerCase();
+                if(title.contains(currentFilter)) resultList.records.add(recipe);
+            }
+            adapter.update(resultList);
+        } else {
+            adapter.update(recipeList);
+        }
+        updateRecipeCount();
     }
 
 
@@ -101,6 +140,10 @@ public class BrowseActivity extends Activity {
         if(user == null) LoginActivity_.intent(this).startForResult(PROFILE_REQUESTCODE);
         else ProfileActivity_.intent(this).user(user).start();
     }
+    @OptionsItem(R.id.action_browse)
+    void actionBrowseSelected() {
+        BrowseActivity_.intent(this).user(user).start();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -119,5 +162,9 @@ public class BrowseActivity extends Activity {
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Login cancelled", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void updateRecipeCount(){
+        header.setText(getString(R.string.browse_header)+"("+Integer.toString(adapter.getCount())+")");
     }
 }

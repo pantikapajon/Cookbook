@@ -228,6 +228,10 @@ public class ViewRecipeActivity extends Activity {
         if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
         else ProfileActivity_.intent(this).user(user).start();
     }
+    @OptionsItem(R.id.action_browse)
+    void actionBrowseSelected() {
+        BrowseActivity_.intent(this).user(user).start();
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 

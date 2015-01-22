@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -25,7 +24,6 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.NonConfigurationInstance;
 import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
-import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_profile)
@@ -36,9 +34,6 @@ public class ProfileActivity extends Activity {
     public static final int LOGIN_REQUESTCODE = 40;
     public static final String USER = "user";
     public static final String RECIPE = "recipe";
-    public static final String RECIPELIST = "recipelist";
-    public static final String LIKELIST = "likelist";
-    public static final String USERINFO = "userinfo";
 
     @ViewById
     TextView username;
@@ -154,6 +149,10 @@ public class ProfileActivity extends Activity {
     void actionProfileSelected() {
         if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
         else ProfileActivity_.intent(this).user(user).start();
+    }
+    @OptionsItem(R.id.action_browse)
+    void actionBrowseSelected() {
+        BrowseActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

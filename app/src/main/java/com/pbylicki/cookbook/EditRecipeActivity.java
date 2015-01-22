@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -130,6 +129,17 @@ public class EditRecipeActivity extends Activity {
         openPictureSourceSelectionDialog();
     }
 
+    @Click
+    void deleteImagebuttonClicked(){
+        recipe.pictureBytes = null;
+        image.setImageResource(R.drawable.ic_action_picture);
+        if(oldPictureBytes != null) restBackgroundTask.deletePicture(user, recipe);
+    }
+
+    public void deleteImageSuccess(){
+        Toast.makeText(this, getString(R.string.edit_recipe_picture_deleted), Toast.LENGTH_LONG).show();
+    }
+
     public void editError(Exception e) {
         ringProgressDialog.dismiss();
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
@@ -160,6 +170,10 @@ public class EditRecipeActivity extends Activity {
     void actionProfileSelected() {
         if(user == null) LoginActivity_.intent(this).startForResult(BrowseActivity_.PROFILE_REQUESTCODE);
         else ProfileActivity_.intent(this).user(user).start();
+    }
+    @OptionsItem(R.id.action_browse)
+    void actionBrowseSelected() {
+        BrowseActivity_.intent(this).user(user).start();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -193,10 +207,10 @@ public class EditRecipeActivity extends Activity {
     }
 
     private void openPictureSourceSelectionDialog() {
-        final CharSequence[] items = { "Zrób zdjęcie", "Wybierz z galerii",
-                "Anuluj" };
+        final CharSequence[] items = { getString(R.string.add_recipe_add_photo_shoot), getString(R.string.add_recipe_add_photo_from_gallery),
+                getString(R.string.add_recipe_cancel) };
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Dodaj zdjęcie");
+        builder.setTitle(getString(R.string.add_recipe_add_photo));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
@@ -300,15 +314,8 @@ public class EditRecipeActivity extends Activity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
         byte[] b = byteArrayOutputStream.toByteArray();
         String imageEncoded = Base64.encodeToString(b, Base64.NO_WRAP | Base64.NO_PADDING);
-        Log.d(getClass().getSimpleName(), imageEncoded);
-        Toast.makeText(this, "" + imageEncoded.length(), Toast.LENGTH_SHORT).show();
+        //Log.d(getClass().getSimpleName(), imageEncoded);
+        //Toast.makeText(this, "" + imageEncoded.length(), Toast.LENGTH_SHORT).show();
         return imageEncoded;
-    }
-    public void pictureAdded(int id) {
-        Toast.makeText(this, "Picture added with id=" + id + ".", Toast.LENGTH_SHORT).show();
-    }
-    public void addPictureFailed(Exception e) {
-        Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        e.printStackTrace();
     }
 }

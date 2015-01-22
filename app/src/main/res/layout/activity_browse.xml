@@ -3,9 +3,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <AutoCompleteTextView
+        android:id="@+id/filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/browse_filter"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/filter"
+        android:text="@string/browse_header"
+        android:textColor="@color/white"
+        android:background="@color/orangebasic"
+        android:layout_margin="5dp"
+        android:padding="5dp"/>
+
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header"/>
 
 </RelativeLayout>

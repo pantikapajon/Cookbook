@@ -23,7 +23,7 @@ public class RestEditRecipeBackgroundTask {
             restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
             restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
             restClient.editRecipeEntry(recipe);
-            if(oldPictureBytes != recipe.pictureBytes){
+            if(oldPictureBytes != recipe.pictureBytes && recipe.pictureBytes != null){
                 restClient.deletePictureEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
                 Picture picture = new Picture();
                 picture.base64bytes = recipe.pictureBytes;
@@ -36,6 +36,17 @@ public class RestEditRecipeBackgroundTask {
             publishError(e);
         }
     }
+    @Background
+    void deletePicture(User user, Recipe recipe){
+        try {
+            restClient.setHeader("X-Dreamfactory-Application-Name", "cookbook");
+            restClient.setHeader("X-Dreamfactory-Session-Token", user.sessionId);
+            restClient.deletePictureEntryForRecipe("recipeId=" + Integer.toString(recipe.id));
+            publishDeleteResult();
+        } catch (Exception e) {
+            publishError(e);
+        }
+    }
     @UiThread
     void publishResult() {
         activity.editSuccess();
@@ -43,5 +54,9 @@ public class RestEditRecipeBackgroundTask {
     @UiThread
     void publishError(Exception e) {
         activity.editError(e);
+    }
+    @UiThread
+    void publishDeleteResult() {
+        activity.deleteImageSuccess();
     }
 }

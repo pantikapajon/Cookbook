@@ -10,6 +10,7 @@
     <string name="action_search">Search</string>
     <string name="action_add">New Recipe</string>
     <string name="action_profile">My Profile</string>
+    <string name="action_browse">Browse</string>
     <string name="password">Password</string>
     <string name="email">E-mail</string>
     <string name="login">Log in</string>
@@ -29,6 +30,10 @@
     <string name="add_recipe_toast_added">Recipe added</string>
     <string name="add_recipe_toast_required">The following field is required: </string>
     <string name="add_recipe_image_button">Add</string>
+    <string name="add_recipe_add_photo">Add Photo</string>
+    <string name="add_recipe_add_photo_from_gallery">Select from Gallery</string>
+    <string name="add_recipe_add_photo_shoot">Take a Photo</string>
+    <string name="add_recipe_cancel">Cancel</string>
     <string name="view_recipe_author">by:\u0020\u0020</string>
     <string name="view_recipe_commentlabel">Comments</string>
     <string name="view_recipe_comment_field">New Comment</string>
@@ -40,6 +45,7 @@
     <string name="view_recipe_action_denied">You are not authorized to do this action.</string>
     <string name="edit_recipe_header">Edit Recipe</string>
     <string name="edit_recipe_toast_edited">Recipe edited</string>
+    <string name="edit_recipe_picture_deleted">Picture deleted</string>
     <string name="user_already_logged_in">You are logged in.</string>
     <string name="profile_username">Username</string>
     <string name="profile_email">e-mail:\u0020\u0020</string>
@@ -47,5 +53,7 @@
     <string name="profile_last_modified">last active:\u0020\u0020</string>
     <string name="profile_likes">Likes</string>
     <string name="profile_recipes">Recipes</string>
+    <string name="browse_header">Recipes\u0020</string>
+    <string name="browse_filter">select filter</string>
 
 </resources>

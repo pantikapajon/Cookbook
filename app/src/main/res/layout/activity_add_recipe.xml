@@ -116,21 +116,31 @@
         android:layout_height="100dp"
         android:layout_below="@+id/steps"
         android:layout_margin="20dp"
-        android:background="@drawable/ic_action_picture"/>
+        android:src="@drawable/ic_action_picture"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/imagebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/steps"
         android:layout_toRightOf="@+id/image"
-        android:text="@string/add_recipe_image_button"
+        android:src="@drawable/ic_action_new_picture"
         android:textColor="@color/white"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
+        android:padding="10dp"
         android:layout_centerHorizontal="true"
+        android:background="@color/orangebasic"/>
+    <ImageButton
+        android:id="@+id/deleteImagebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/steps"
+        android:layout_toRightOf="@+id/imagebutton"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_action_remove"
         android:background="@color/orangebasic"/>
 
     <Button

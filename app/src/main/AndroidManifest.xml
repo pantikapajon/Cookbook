@@ -17,7 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MyActivity"/>
         <activity android:name=".ProfileActivity_" android:configChanges="orientation|screenSize"/>
         <activity android:name=".AddRecipeActivity_" android:configChanges="orientation|screenSize"/>
         <activity android:name=".EditRecipeActivity_" android:configChanges="orientation|screenSize"/>
