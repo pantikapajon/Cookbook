@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -94,6 +95,7 @@ public class BrowseActivity extends Activity {
         titlesAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, titles);
         filter.setAdapter(titlesAdapter);
         updateRecipeCount();
+        filter.setVisibility(View.VISIBLE);
     }
 
     @AfterTextChange(R.id.filter)
@@ -115,6 +117,7 @@ public class BrowseActivity extends Activity {
 
     @ItemClick
     void listItemClicked(Recipe item){
+        if(item.id == null) return;
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         bundle.putSerializable(RECIPE, item);
