@@ -104,7 +104,9 @@ public class BrowseActivity extends Activity {
         if(currentFilter.length()>=FILTER_THRESHOLD){
             resultList = new RecipeList();
             for(Recipe recipe : recipeList.records){
-                String title = recipe.title.toLowerCase();
+                String title = "";
+                if(recipe.title != null) title = recipe.title.toLowerCase();
+
                 if(title.contains(currentFilter)) resultList.records.add(recipe);
             }
             adapter.update(resultList);
@@ -169,7 +171,8 @@ public class BrowseActivity extends Activity {
 
     private void updateRecipeCount(){
         int count = adapter.getCount();
-        if( count == 1 && adapter.getItem(0).id == null) header.setText(getString(R.string.browse_header)+"(0)");
-        else header.setText(getString(R.string.browse_header)+"("+Integer.toString(count)+")");
+        //if( count == 1 && adapter.getItem(0).id == null) header.setText(getString(R.string.browse_header)+"(0)");
+        //else header.setText(getString(R.string.browse_header)+"("+Integer.toString(count)+")");
+        header.setText(getString(R.string.browse_header)+"("+Integer.toString(count)+")");
     }
 }
