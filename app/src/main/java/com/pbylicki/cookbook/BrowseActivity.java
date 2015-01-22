@@ -168,6 +168,8 @@ public class BrowseActivity extends Activity {
     }
 
     private void updateRecipeCount(){
-        header.setText(getString(R.string.browse_header)+"("+Integer.toString(adapter.getCount())+")");
+        int count = adapter.getCount();
+        if( count == 1 && adapter.getItem(0).id == null) header.setText(getString(R.string.browse_header)+"(0)");
+        else header.setText(getString(R.string.browse_header)+"("+Integer.toString(count)+")");
     }
 }
